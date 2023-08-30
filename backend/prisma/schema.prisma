@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// TODO nome deve ser obnrigatorio
+model Bloco {
+  id        Int      @id @default(autoincrement())
+  descricao String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  andares   Andar[]
+
+  @@map("blocos")
+}
+
+model Andar {
+  id        Int      @id @default(autoincrement())
+  descricao String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bloco     Bloco    @relation(fields: [bloco_id], references: [id])
+  bloco_id   Int
+
+  plantas_baixas PlantaBaixa[]
+
+  @@map("andares")
+}
+
+model PlantaBaixa {
+  id        Int      @id @default(autoincrement())
+  descricao String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  andar     Andar    @relation(fields: [andar_id], references: [id])
+  andar_id   Int
+
+  salas     Sala[]
+
+  @@map("plantas_baixas")
+}
+
+model Sala {
+  id        Int      @id @default(autoincrement())
+  descricao String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  planta_baixa PlantaBaixa @relation(fields: [planta_baixa_id], references: [id])
+  planta_baixa_id   Int
+
+  @@map("salas")
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  user      String   @unique
+  senha     String
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("usuarios")
+}
