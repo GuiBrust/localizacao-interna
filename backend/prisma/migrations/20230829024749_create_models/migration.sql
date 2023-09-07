@@ -65,3 +65,6 @@ ALTER TABLE "plantas_baixas" ADD CONSTRAINT "plantas_baixas_andar_id_fkey" FOREI
 
 -- AddForeignKey
 ALTER TABLE "salas" ADD CONSTRAINT "salas_planta_baixa_id_fkey" FOREIGN KEY ("planta_baixa_id") REFERENCES "plantas_baixas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- Criar um usuário padrão
+INSERT INTO "usuarios" ("nome", "user", "senha", "updatedAt") VALUES ('Administrador', 'admin', '$2a$08$BUWyl8p6eYr/xy2CAsYw3OzMddudY9EbU5Kb/WIoU6.HE0MtTzfMe', NOW());
