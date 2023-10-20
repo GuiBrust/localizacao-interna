@@ -13,7 +13,6 @@ class UpdateUserService {
   async execute({ id, ...updatedFields }: UserRequest) {
     updatedFields.senha = await hash(updatedFields.senha, 8);
 
-
     const userUpdated = await prismaClient.usuario.update({
       where: {
         id: id,
