@@ -19,18 +19,18 @@ export function Header() {
 
         <nav className={styles.menuNav}>
           <Link href="/usuario" passHref>
-            <a>Usuários</a>
+            <a>Usuário</a>
           </Link>
 
           <Link href="/bloco" passHref>
-            <a>Blocos</a>
+            <a>Bloco</a>
           </Link>
 
-          <Link href="/bloco" passHref>
+          <Link href="/andar" passHref>
             <a>Andar</a>
           </Link>
 
-          <Link href="/bloco" passHref>
+          <Link href="/planta_baixa" passHref>
             <a>Planta Baixa</a>
           </Link>
 
