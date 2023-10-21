@@ -12,7 +12,8 @@ class ListUsersService {
         nome: true,
         user: true,
         ativo: true
-      }
+      },
+      orderBy: { id: 'desc' }
     });
 
     return users;

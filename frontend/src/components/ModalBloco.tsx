@@ -11,7 +11,6 @@ import {
   FormLabel,
   Input,
   Box,
-  Switch,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -27,6 +26,7 @@ async function handlePostBloco(descricao: string, setData: any) {
 
     const response = await apiClient.get("/blocos");
     setData(response.data);
+    toast.success("Bloco cadastrado com sucesso!");
   } catch {
     toast.error("Erro ao cadastrar bloco!");
   }
@@ -42,6 +42,7 @@ async function handlePutBloco(id: string, descricao: string, setData: any) {
 
     const response = await apiClient.get("/blocos");
     setData(response.data);
+    toast.success("Bloco atualizado com sucesso!");
   } catch {
     toast.error("Erro ao atualizar bloco!");
   }

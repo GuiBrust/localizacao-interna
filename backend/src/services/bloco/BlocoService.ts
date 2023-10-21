@@ -12,7 +12,9 @@ class CreateBlocoService {
 
 class GetBlocosService {
   async execute() {
-    const bloco = await prismaClient.bloco.findMany();
+    const bloco = await prismaClient.bloco.findMany({
+      orderBy: { id: 'desc' }
+    });
 
     return bloco;
   }

@@ -17,7 +17,11 @@ class CreateAndarService {
 
 class GetAndaresService {
   async execute() {
-    const andar = await prismaClient.andar.findMany();
+    // todo incluir blocos e trazer em ordem descresente pelo id
+    const andar = await prismaClient.andar.findMany({
+      include: { bloco: true },
+      orderBy: { id: 'desc' }
+    });
 
     return andar;
   }
