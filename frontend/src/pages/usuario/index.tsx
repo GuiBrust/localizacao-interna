@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import ModalUser from "../../components/ModalUser";
+import ConfirmModal from "../../components/ConfirmModal";
 
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
@@ -38,6 +39,18 @@ export default function Usuario({ users }: UsuarioProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dataEdit, setDataEdit] = useState({});
   const [userList, setUserList] = useState(users || []);
+
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [usuarioToDelete, setUsuarioToDelete] = useState(null);
+
+  const openConfirmModal = (id) => {
+    setUsuarioToDelete(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
 
   useEffect(() => {
     setUserList(users);
@@ -114,7 +127,7 @@ export default function Usuario({ users }: UsuarioProps) {
                       <Td p={0}>
                         <DeleteIcon
                           fontSize={20}
-                          onClick={() => handleRemove(id)}
+                          onClick={() => openConfirmModal(id)}
                         />
                       </Td>
                     </Tr>
@@ -133,6 +146,18 @@ export default function Usuario({ users }: UsuarioProps) {
             dataEdit={dataEdit}
             setDataEdit={setDataEdit}
             setUserList={setUserList}
+          />
+        )}
+        {isConfirmModalOpen && (
+          <ConfirmModal
+            isOpen={isConfirmModalOpen}
+            onClose={closeConfirmModal}
+            onConfirm={() => {
+              handleRemove(usuarioToDelete);
+              closeConfirmModal();
+            }}
+            title="Confirmação de Exclusão"
+            description="Tem certeza de que deseja excluir este Usuário?"
           />
         )}
       </Flex>
