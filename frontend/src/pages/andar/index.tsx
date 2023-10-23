@@ -78,7 +78,7 @@ export default function Andar({ data }: AndarProps) {
         fontSize="20px"
         fontFamily="poppins"
       >
-        <Box maxW={800} w="100%" h="100vh" py={10} px={2}>
+        <Box maxW={1200} w="100%" h="100vh" py={10} px={2}>
           <Button
             colorScheme="blue"
             onClick={() => {
@@ -112,6 +112,7 @@ export default function Andar({ data }: AndarProps) {
                       <Td p={0}>
                         <EditIcon
                           color="blue.500"
+                          fontSize={20}
                           onClick={() => {
                             setDataEdit({ id, descricao, bloco_id });
                             onOpen();

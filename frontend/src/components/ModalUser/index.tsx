@@ -139,11 +139,11 @@ const ModalUser = ({
           </ModalBody>
 
           <ModalFooter justifyContent="start">
-            <Button colorScheme="green" mr={3} onClick={handleSave}>
-              SALVAR
+            <Button colorScheme="blue" mr={3} onClick={handleSave}>
+              Salvar
             </Button>
-            <Button colorScheme="red" onClick={onClose}>
-              CANCELAR
+            <Button onClick={onClose}>
+              Cancelar
             </Button>
           </ModalFooter>
         </ModalContent>

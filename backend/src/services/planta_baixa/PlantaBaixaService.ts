@@ -21,7 +21,10 @@ class CreatePlantaBaixaService {
 
 class GetPlantasBaixasService {
   async execute() {
-    const planta_baixa = await prismaClient.plantaBaixa.findMany();
+    const planta_baixa = await prismaClient.plantaBaixa.findMany({
+      include: { salas: true, andar: { include: { bloco: true } } },
+      orderBy: { id: 'desc' }
+    });
 
     return planta_baixa;
   }

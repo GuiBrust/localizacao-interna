@@ -77,7 +77,7 @@ export default function Bloco({ data }: BlocoProps) {
         fontSize="20px"
         fontFamily="poppins"
       >
-        <Box maxW={800} w="100%" h="100vh" py={10} px={2}>
+        <Box maxW={1200} w="100%" h="100vh" py={10} px={2}>
           <Button
             colorScheme="blue"
             onClick={() => [setDataEdit({}), onOpen()]}
@@ -105,6 +105,7 @@ export default function Bloco({ data }: BlocoProps) {
                       <Td>{descricao}</Td>
                       <Td p={0}>
                         <EditIcon
+                          color="blue.500"
                           fontSize={20}
                           onClick={() => [
                             setDataEdit({ id, descricao }),
@@ -114,6 +115,7 @@ export default function Bloco({ data }: BlocoProps) {
                       </Td>
                       <Td p={0}>
                         <DeleteIcon
+                          color="red.500"
                           fontSize={20}
                           onClick={() => openConfirmModal(id)}
                         />

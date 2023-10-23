@@ -96,7 +96,7 @@ export default function ModalAndar({ isOpen, onClose, dataEdit, setData }) {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {dataEdit.id ? "Editar Andar" : "Cadastrar Andar"}
+          {dataEdit.id ? "Editar Andar" : "Adicionar Andar"}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
@@ -130,7 +130,7 @@ export default function ModalAndar({ isOpen, onClose, dataEdit, setData }) {
             mr={3}
             onClick={dataEdit.id ? handlePut : handlePost}
           >
-            {dataEdit.id ? "Editar" : "Cadastrar"}
+           Salvar
           </Button>
           <Button onClick={onClose}>Cancelar</Button>
         </ModalFooter>

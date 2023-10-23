@@ -83,7 +83,7 @@ export default function ModalBloco({ isOpen, onClose, dataEdit, setData }) {
             mr={3}
             onClick={dataEdit.id ? handlePut : handlePost}
           >
-            {dataEdit.id ? "Salvar" : "Adicionar"}
+            Salvar
           </Button>
           <Button onClick={onClose}>Cancelar</Button>
         </ModalFooter>
