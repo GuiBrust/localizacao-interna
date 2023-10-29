@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import ConfirmModal from "../../components/ConfirmModal";
+import ModalPlantaBaixa from "../../components/ModalPlantaBaixa";
+
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -32,6 +34,8 @@ interface PlantaBaixaProps {
 }
 
 export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [dataEdit, setDataEdit] = useState({});
   const [dataList, setDataList] = useState(plantas_baixas || []);
 
   useEffect(() => {
@@ -91,6 +95,7 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
                     <Th fontSize="20px">Bloco</Th>
                     <Th fontSize="20px">Andar</Th>
                     <Th p={0}></Th>
+                    <Th p={0}></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -103,6 +108,16 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
                       <Td>{descricao}</Td>
                       <Td>{andar.bloco.descricao}</Td>
                       <Td>{andar.descricao}</Td>
+                      <Td p={0}>
+                        <EditIcon
+                          color="blue.500"
+                          fontSize={20}
+                          onClick={() => {
+                            setDataEdit({ id, descricao, andar });
+                            onOpen();
+                          }}
+                        />
+                      </Td>
                       <Td p={0}>
                         <DeleteIcon
                           color="red.500"
@@ -117,6 +132,26 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
             </TableContainer>
           </Box>
         </Box>
+        {isOpen && (
+          <ModalPlantaBaixa
+            isOpen={isOpen}
+            onClose={onClose}
+            dataEdit={dataEdit}
+            setData={setDataList}
+          />
+        )}
+        {isConfirmModalOpen && (
+          <ConfirmModal
+            isOpen={isConfirmModalOpen}
+            onClose={closeConfirmModal}
+            title="Confirmação de Exclusão"
+            description="Tem certeza que deseja remover esta Planta Baixa?"
+            onConfirm={() => {
+              handleRemove(blockToDelete);
+              closeConfirmModal();
+            }}
+          />
+        )}
       </Flex>
     </>
   );

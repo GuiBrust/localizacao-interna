@@ -21,7 +21,7 @@ import {
 
 import {
   GetAndaresController,
-  GetAndarByIdController,
+  GetAndarToBlocoController,
   UpdateAndarController,
   DeleteAndarController,
   CreateAndarController
@@ -64,7 +64,7 @@ router.delete('/blocos/:id', isAuthenticated, new DeleteBlocoController().handle
 // ROTAS DE ANDAR
 router.post('/andares', isAuthenticated, new CreateAndarController().handle);
 router.get('/andares', new GetAndaresController().handle);
-router.get('/andares/:id', new GetAndarByIdController().handle);
+router.get('/andares/:bloco_id', new GetAndarToBlocoController().handle);
 router.put('/andares/:id', isAuthenticated, new UpdateAndarController().handle);
 router.delete('/andares/:id', isAuthenticated, new DeleteAndarController().handle);
 

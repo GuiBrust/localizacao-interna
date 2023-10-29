@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {
   CreateAndarService,
   GetAndaresService,
-  GetAndarByIdService,
+  GetAndarToBlocoService,
   UpdateAndarService,
   DeleteAndarService
 } from "../../services/andar/AndarService";
@@ -29,15 +29,15 @@ class GetAndaresController {
   }
 }
 
-class GetAndarByIdController {
+class GetAndarToBlocoController {
   async handle(req: Request, res: Response) {
-    const { id } = req.params;
+    const { bloco_id } = req.params;
 
-    const getAndarByIdService = new GetAndarByIdService();
+    const getAndarToBlocoService = new GetAndarToBlocoService();
 
-    const andar = await getAndarByIdService.execute(Number(id));
+    const andares = await getAndarToBlocoService.execute(Number(bloco_id));
 
-    return res.json(andar);
+    return res.json(andares);
   }
 }
 
@@ -69,7 +69,7 @@ class DeleteAndarController {
 export {
   CreateAndarController,
   GetAndaresController,
-  GetAndarByIdController,
+  GetAndarToBlocoController,
   UpdateAndarController,
   DeleteAndarController
 };

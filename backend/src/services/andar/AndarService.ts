@@ -26,12 +26,11 @@ class GetAndaresService {
   }
 }
 
-class GetAndarByIdService {
-  // TODO busca o bloco pelo id
-  async execute(id: number) {
-    const andar = await prismaClient.andar.findUnique({
-      where: { id },
-      include: { bloco: true }
+class GetAndarToBlocoService {
+  async execute(bloco_id: number) {
+    const andar = await prismaClient.andar.findMany({
+      where: { bloco_id: bloco_id },
+      orderBy: { id: 'asc' }
     });
 
     return andar;
@@ -62,7 +61,7 @@ class DeleteAndarService {
 export {
   CreateAndarService,
   GetAndaresService,
-  GetAndarByIdService,
+  GetAndarToBlocoService,
   UpdateAndarService,
   DeleteAndarService
 };
