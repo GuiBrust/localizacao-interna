@@ -57,17 +57,27 @@ class UpdatePlantaBaixaController {
 
     const updatePlantaBaixaService = new UpdatePlantaBaixaService();
 
-    if (!req.file) {
-      return res.status(400).json({ message: 'Imagem não encontrada' });
-    } else {
-      const planta_baixa = await updatePlantaBaixaService.execute(
-        Number(id),
-        descricao,
-        req.file.filename,
-        Number(andar_id)
-      );
+    try {
+      let planta_baixa;
+
+      if (req.file) {
+        planta_baixa = await updatePlantaBaixaService.executeWithImage(
+          Number(id),
+          descricao,
+          req.file.filename,
+          Number(andar_id)
+        );
+      } else {
+        planta_baixa = await updatePlantaBaixaService.executeWithoutImage(
+          Number(id),
+          descricao,
+          Number(andar_id)
+        );
+      }
 
       return res.json(planta_baixa);
+    } catch (error) {
+      return res.status(500).json({ message: 'Erro ao atualizar a planta baixa' });
     }
   }
 }
