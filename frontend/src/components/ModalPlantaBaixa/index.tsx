@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {
   Modal,
   ModalOverlay,
@@ -16,7 +17,10 @@ import {
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { setupAPIClient } from "../services/api";
+import { setupAPIClient } from "../../services/api";
+import styles from "./styles.module.scss";
+import { FcAddImage } from "react-icons/fc";
+import Image from "next/image";
 
 export default function ModalPlantaBaixa({
   isOpen,
@@ -29,6 +33,29 @@ export default function ModalPlantaBaixa({
   const [andar_id, setAndar_id] = useState(dataEdit.andar?.id || "");
   const [opcoes_blocos, setOpcoesBlocos] = useState([]);
   const [opcoes_andares, setOpcoesAndares] = useState([]);
+
+  const link_imagem = dataEdit.imagem ? "http://localhost:3333/files/" + dataEdit.imagem : "";
+  const [imageUrl, setImageUrl] = useState( link_imagem);
+  const [imageProd, setImage] = useState(null);
+
+  function handleFile(e: ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) {
+      return;
+    }
+
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (file.type === "image/jpeg" || file.type === "image/png") {
+      setImage(file);
+      setImageUrl(URL.createObjectURL(file));
+    } else {
+      toast.error("Formato de imagem inválido!");
+    }
+  }
 
   useEffect(() => {
     async function fetchBlocos() {
@@ -57,18 +84,25 @@ export default function ModalPlantaBaixa({
     }
   }, [bloco_id, isOpen]);
 
-  async function handlePostPlantaBaixa(descricao: string, bloco_id: number) {
+  async function handlePostPlantaBaixa(
+    descricao: string,
+    andar_id: number,
+    file: File
+  ) {
     try {
       const apiClient = setupAPIClient();
+      const formData = new FormData();
 
-      await apiClient.post("/plantas_baixas", {
-        descricao,
-        bloco_id: Number(bloco_id),
-      });
+      formData.append("descricao", descricao);
+      formData.append("andar_id", String(andar_id));
+      formData.append("file", file);
+
+      await apiClient.post("/plantas_baixas", formData);
 
       const response = await apiClient.get("/plantas_baixas");
       setData(response.data);
       toast.success("Planta baixa cadastrada com sucesso!");
+      onClose();
     } catch {
       toast.error("Erro ao cadastrar planta baixa!");
     }
@@ -77,19 +111,23 @@ export default function ModalPlantaBaixa({
   async function handlePutPlantaBaixa(
     id: string,
     descricao: string,
-    bloco_id: number
+    andar_id: number,
+    file: File
   ) {
     try {
       const apiClient = setupAPIClient();
+      const formData = new FormData();
 
-      await apiClient.put("/plantas_baixas/" + id, {
-        descricao,
-        bloco_id,
-      });
+      formData.append("descricao", descricao);
+      formData.append("andar_id", String(andar_id));
+      formData.append("file", file);
+
+      await apiClient.put("/plantas_baixas/" + id, formData);
 
       const response = await apiClient.get("/plantas_baixas");
       setData(response.data);
       toast.success("Planta baixa atualizada com sucesso!");
+      onClose();
     } catch {
       toast.error("Erro ao atualizar planta baixa!");
     }
@@ -148,6 +186,34 @@ export default function ModalPlantaBaixa({
               </FormControl>
             </Box>
           </Flex>
+          <Flex>
+            <Box flex={2} m={2}>
+              <label className={styles.labelImage}>
+                <span>
+                  <FcAddImage size={30} />
+                </span>
+
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  onChange={handleFile}
+                />
+                
+                {imageUrl && (
+                  <img
+                    className={styles.previewImage}
+                    src={imageUrl}
+                    alt="Imagem do produto"
+                    width={250}
+                    height={250}
+                  />
+                )}
+              </label>
+            </Box>
+            <Box flex={1} m={2}>
+              <label htmlFor="descricao">Descrição</label>
+            </Box>
+          </Flex>
         </ModalBody>
 
         <ModalFooter>
@@ -156,11 +222,15 @@ export default function ModalPlantaBaixa({
             mr={3}
             onClick={() => {
               if (dataEdit.id) {
-                handlePutPlantaBaixa(dataEdit.id, descricao, andar_id);
+                handlePutPlantaBaixa(
+                  dataEdit.id,
+                  descricao,
+                  andar_id,
+                  imageProd
+                );
               } else {
-                handlePostPlantaBaixa(descricao, andar_id);
+                handlePostPlantaBaixa(descricao, Number(andar_id), imageProd);
               }
-              onClose();
             }}
           >
             Salvar

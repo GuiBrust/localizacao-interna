@@ -57,11 +57,11 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
   const handleRemove = async (id: number) => {
     try {
       const apiClient = setupAPIClient();
-      await apiClient.delete("andares/" + id);
+      await apiClient.delete("plantas_baixas/" + id);
       setDataList(dataList.filter((andar) => andar.id !== id));
-      toast.success("Andar removido com sucesso!");
+      toast.success("Planta Baixa removido com sucesso!");
     } catch {
-      toast.error("Erro ao remover andar!");
+      toast.error("Erro ao remover Planta Baixa!");
     }
   };
 
@@ -99,7 +99,7 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {dataList.map(({ id, descricao, andar }, index) => (
+                  {dataList.map(({ id, descricao, andar, imagem }, index) => (
                     <Tr
                       key={index}
                       cursor="pointer "
@@ -113,7 +113,7 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
                           color="blue.500"
                           fontSize={20}
                           onClick={() => {
-                            setDataEdit({ id, descricao, andar });
+                            setDataEdit({ id, descricao, andar, imagem });
                             onOpen();
                           }}
                         />
