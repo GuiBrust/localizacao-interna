@@ -21,6 +21,23 @@ import { setupAPIClient } from "../../services/api";
 import styles from "./styles.module.scss";
 import { FcAddImage } from "react-icons/fc";
 import Image from "next/image";
+import ImageMarker, { Marker } from "react-image-marker";
+
+async function cadastraSalas(id_planta_baixa: number, markers: Marker[]) {
+  try {
+    const apiClient = setupAPIClient();
+    markers.forEach(async (marker) => {
+      await apiClient.post("/salas", {
+        descricao: "Sala x",
+        planta_baixa_id: id_planta_baixa,
+        coordenada_x: String(marker.left),
+        coordenada_y: String(marker.top),
+      });
+    });
+  } catch {
+    toast.error("Erro ao cadastrar salas!");
+  }
+}
 
 export default function ModalPlantaBaixa({
   isOpen,
@@ -34,8 +51,10 @@ export default function ModalPlantaBaixa({
   const [opcoes_blocos, setOpcoesBlocos] = useState([]);
   const [opcoes_andares, setOpcoesAndares] = useState([]);
 
-  const link_imagem = dataEdit.imagem ? "http://localhost:3333/files/" + dataEdit.imagem : "";
-  const [imageUrl, setImageUrl] = useState( link_imagem);
+  const link_imagem = dataEdit.imagem
+    ? "http://localhost:3333/files/" + dataEdit.imagem
+    : "";
+  const [imageUrl, setImageUrl] = useState(link_imagem);
   const [imageProd, setImage] = useState(null);
 
   function handleFile(e: ChangeEvent<HTMLInputElement>) {
@@ -64,7 +83,7 @@ export default function ModalPlantaBaixa({
         const response = await apiClient.get("/blocos");
         setOpcoesBlocos(response.data);
       } catch {
-        toast.error("Erro ao buscar opções de blocos!");
+        toast.error("Erro ao buscar opções de Blocos!");
       }
     }
 
@@ -74,20 +93,40 @@ export default function ModalPlantaBaixa({
         const response = await apiClient.get("/andares/" + bloco_id);
         setOpcoesAndares(response.data);
       } catch {
-        toast.error("Erro ao buscar opções de andares!");
+        toast.error("Erro ao buscar opções de Andares!");
+      }
+    }
+
+    async function fetchSalas() {
+      try {
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get(`/salas?planta_baixa_id=${dataEdit.id}`);
+    
+        setMarkers(
+          response.data.map((sala) => ({
+            top: parseFloat(sala.coordenada_y),
+            left: parseFloat(sala.coordenada_x),
+          }))
+        );
+      } catch {
+        toast.error("Erro ao buscar Salas!");
       }
     }
 
     if (isOpen) {
       fetchBlocos();
       fetchAndares();
+      if (dataEdit.id) {
+        fetchSalas();
+      }
     }
-  }, [bloco_id, isOpen]);
+  }, [bloco_id, isOpen, dataEdit.id]);
 
   async function handlePostPlantaBaixa(
     descricao: string,
     andar_id: number,
-    file: File
+    file: File,
+    markers: Marker[]
   ) {
     try {
       const apiClient = setupAPIClient();
@@ -102,7 +141,6 @@ export default function ModalPlantaBaixa({
       const response = await apiClient.get("/plantas_baixas");
       setData(response.data);
       toast.success("Planta baixa cadastrada com sucesso!");
-      onClose();
     } catch {
       toast.error("Erro ao cadastrar planta baixa!");
     }
@@ -112,7 +150,8 @@ export default function ModalPlantaBaixa({
     id: string,
     descricao: string,
     andar_id: number,
-    file: File
+    file: File,
+    markers: Marker[]
   ) {
     try {
       const apiClient = setupAPIClient();
@@ -126,19 +165,25 @@ export default function ModalPlantaBaixa({
 
       const response = await apiClient.get("/plantas_baixas");
       setData(response.data);
+
+      cadastraSalas(id, markers);
+
       toast.success("Planta baixa atualizada com sucesso!");
-      onClose();
     } catch {
       toast.error("Erro ao atualizar planta baixa!");
     }
   }
+
+  const [markers, setMarkers] = useState<Marker[]>([]);
+  console.log(markers);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {dataEdit.id ? "Editar planta baixa" : "Cadastrar planta baixa"}
+          {dataEdit.id ? "Editar " : "Cadastrar "}
+          Planta Baixa
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
@@ -189,26 +234,32 @@ export default function ModalPlantaBaixa({
           <Flex>
             <Box flex={2} m={2}>
               <label className={styles.labelImage}>
-                <span>
+                <span
+                  onClick={() => document.getElementById("fileInput").click()}
+                >
                   <FcAddImage size={30} />
                 </span>
-
-                <input
-                  type="file"
-                  accept="image/png, image/jpeg"
-                  onChange={handleFile}
-                />
-                
                 {imageUrl && (
-                  <img
+                  <ImageMarker
                     className={styles.previewImage}
                     src={imageUrl}
+                    markers={markers}
+                    onAddMarker={(marker: Marker) => {
+                      setMarkers([...markers, marker]);
+                    }}
                     alt="Imagem do produto"
                     width={250}
                     height={250}
                   />
                 )}
               </label>
+              <input
+                className={styles.inputImage}
+                type="file"
+                accept="image/png, image/jpeg"
+                id="fileInput"
+                onChange={handleFile}
+              />
             </Box>
             <Box flex={1} m={2}>
               <label htmlFor="descricao">Descrição</label>
@@ -226,10 +277,11 @@ export default function ModalPlantaBaixa({
                   dataEdit.id,
                   descricao,
                   andar_id,
-                  imageProd
+                  imageProd,
+                  markers
                 );
               } else {
-                handlePostPlantaBaixa(descricao, Number(andar_id), imageProd);
+                handlePostPlantaBaixa(descricao, andar_id, imageProd, markers);
               }
             }}
           >

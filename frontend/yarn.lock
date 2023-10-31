@@ -2615,6 +2615,11 @@ react-icons@^4.10.1:
   resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.10.1.tgz"
   integrity sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==
 
+react-image-marker@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-image-marker/-/react-image-marker-1.2.0.tgz#2f964a826aaa8c6b18c4ce7cedb0284f8eab8b6c"
+  integrity sha512-HFrzKVnX/hgZqHlxwV7XQNiyMRowD1IAnbsf4dZCEuSzGlGHxAv+sCv/AU1VHHVxFxoHubNL/xYNpGQfgtX67A==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"

@@ -1,3 +1,6 @@
+.inputImage{
+  display: none;
+}
 
 .labelImage{
   min-height: 200px;
@@ -8,10 +11,6 @@
   align-items: center;
   cursor: pointer;
   position: relative;
-
-  input{
-    display: none;
-  }
 
   span{
     z-index: 99;

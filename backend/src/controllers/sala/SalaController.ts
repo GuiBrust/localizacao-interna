@@ -15,7 +15,7 @@ class CreateSalaController {
 
 class GetSalasPorPlantaBaixaController {
   async handle(req: Request, res: Response) {
-    const { planta_baixa_id } = req.body;
+    const { planta_baixa_id } = req.query;
 
     const getSalasPorPlantaBaixaService = new GetSalasPorPlantaBaixaService();
 
