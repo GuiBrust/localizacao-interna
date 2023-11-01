@@ -14,6 +14,15 @@ import {
   Input,
   Box,
   Select,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -22,17 +31,28 @@ import styles from "./styles.module.scss";
 import { FcAddImage } from "react-icons/fc";
 import Image from "next/image";
 import ImageMarker, { Marker } from "react-image-marker";
+import { DeleteIcon } from "@chakra-ui/icons";
+
+async function apagaSalas(id_planta_baixa: number) {
+  const apiClient = setupAPIClient();
+
+  try {
+    await apiClient.delete(`/salas/planta_baixa/${id_planta_baixa}`);
+  } catch (error) {
+    toast.error("Erro ao apagar Salas!");
+  }
+}
 
 async function cadastraSalas(id_planta_baixa: number, markers: Marker[]) {
   const apiClient = setupAPIClient();
 
   try {
-    await apiClient.delete(`/salas/planta_baixa/${id_planta_baixa}`);
+    await apagaSalas(id_planta_baixa);
 
     await Promise.all(
       markers.map(async (marker, indice) => {
         await apiClient.post("/salas", {
-          descricao: "Sala x",
+          descricao: marker.description,
           planta_baixa_id: id_planta_baixa,
           coordenada_x: String(marker.left),
           coordenada_y: String(marker.top),
@@ -114,6 +134,7 @@ export default function ModalPlantaBaixa({
 
         setMarkers(
           response.data.map((sala) => ({
+            description: sala.descricao,
             top: parseFloat(sala.coordenada_y),
             left: parseFloat(sala.coordenada_x),
           }))
@@ -159,7 +180,7 @@ export default function ModalPlantaBaixa({
     }
 
     if (markers.length > 0) {
-      cadastraSalas(response.data.id, markers);
+      cadastraSalas(response.data[0].id, markers);
     }
 
     onClose();
@@ -193,6 +214,8 @@ export default function ModalPlantaBaixa({
 
     if (markers.length > 0) {
       cadastraSalas(id, markers);
+    }else{
+      await apagaSalas(id);
     }
   }
 
@@ -254,6 +277,7 @@ export default function ModalPlantaBaixa({
           </Flex>
           <Flex>
             <Box flex={2} m={2}>
+              <label className={styles.label}>Imagem</label>
               <label className={styles.labelImage}>
                 <span
                   onClick={() => document.getElementById("fileInput").click()}
@@ -268,7 +292,6 @@ export default function ModalPlantaBaixa({
                     onAddMarker={(marker: Marker) => {
                       setMarkers([...markers, marker]);
                     }}
-                    alt="Imagem do produto"
                     width={250}
                     height={250}
                   />
@@ -283,7 +306,48 @@ export default function ModalPlantaBaixa({
               />
             </Box>
             <Box flex={1} m={2}>
-              <label htmlFor="descricao">Descrição</label>
+              <TableContainer>
+                <Table>
+                  <Thead>
+                    <Tr>
+                      <Th>Nº</Th>
+                      <Th>Descrição</Th>
+                      <Th p={0}></Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {markers.map((marker, index) => (
+                      <Tr key={index} _hover={{ bg: "gray.100" }}>
+                        <Td>{index + 1}</Td>
+                        <Td>
+                          <input
+                            type="text"
+                            value={marker.description}
+                            onChange={(e) => {
+                              const updatedMarkers = [...markers];
+                              updatedMarkers[index].description =
+                                e.target.value;
+                              setMarkers(updatedMarkers);
+                            }}
+                          />
+                        </Td>
+                        <Td p={0}>
+                          <DeleteIcon
+                            color="red.500"
+                            fontSize={20}
+                            cursor="pointer "
+                            onClick={() => {
+                              setMarkers(
+                                markers.filter((_, indice) => indice !== index)
+                              );
+                            }}
+                          />
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </Box>
           </Flex>
         </ModalBody>
