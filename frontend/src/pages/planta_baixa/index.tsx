@@ -60,7 +60,7 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
       await apiClient.delete('/salas/planta_baixa/' + id);
       await apiClient.delete("plantas_baixas/" + id);
       setDataList(dataList.filter((andar) => andar.id !== id));
-      toast.success("Planta Baixa removido com sucesso!");
+      toast.success("Planta Baixa removida com sucesso!");
     } catch {
       toast.error("Erro ao remover Planta Baixa!");
     }

@@ -28,7 +28,7 @@ async function handlePostBloco(descricao: string, setData: any) {
     setData(response.data);
     toast.success("Bloco cadastrado com sucesso!");
   } catch {
-    toast.error("Erro ao cadastrar bloco!");
+    toast.error("Erro ao cadastrar Bloco!");
   }
 }
 
@@ -44,7 +44,7 @@ async function handlePutBloco(id: string, descricao: string, setData: any) {
     setData(response.data);
     toast.success("Bloco atualizado com sucesso!");
   } catch {
-    toast.error("Erro ao atualizar bloco!");
+    toast.error("Erro ao atualizar Bloco!");
   }
 }
 

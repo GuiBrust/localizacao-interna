@@ -61,7 +61,7 @@ export default function Andar({ data }: AndarProps) {
       setDataList(dataList.filter((andar) => andar.id !== id));
       toast.success("Andar removido com sucesso!");
     } catch {
-      toast.error("Erro ao remover andar!");
+      toast.error("Erro ao remover Andar!");
     }
   };
 

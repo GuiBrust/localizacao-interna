@@ -43,7 +43,7 @@ async function cadastraSalas(id_planta_baixa: number, markers: Marker[]) {
 
     toast.success("Salas cadastradas com sucesso!");
   } catch (error) {
-    toast.error("Erro ao cadastrar salas!");
+    toast.error("Erro ao cadastrar Salas!");
   }
 }
 
@@ -148,12 +148,12 @@ export default function ModalPlantaBaixa({
       formData.append("file", file);
 
       await apiClient.post("/plantas_baixas", formData);
-      toast.success("Planta baixa cadastrada com sucesso!");
+      toast.success("Planta Baixa cadastrada com sucesso!");
 
       response = await apiClient.get("/plantas_baixas");
       setData(response.data);
     } catch (error) {
-      toast.error("Erro ao cadastrar planta baixa!");
+      toast.error("Erro ao cadastrar Planta Baixa!");
       onClose();
       return;
     }
@@ -184,9 +184,9 @@ export default function ModalPlantaBaixa({
 
       const response = await apiClient.get("/plantas_baixas");
       setData(response.data);
-      toast.success("Planta baixa atualizada com sucesso!");
+      toast.success("Planta Baixa atualizada com sucesso!");
     } catch {
-      toast.error("Erro ao atualizar planta baixa!");
+      toast.error("Erro ao atualizar Planta Baixa!");
       onClose();
       return;
     }

@@ -60,7 +60,7 @@ export default function Bloco({ data }: BlocoProps) {
       setDataList(dataList.filter((bloco) => bloco.id !== id));
       toast.success("Bloco excluído com sucesso!");
     } catch (error) {
-      toast.error("Erro ao excluir bloco!");
+      toast.error("Erro ao excluir Bloco!");
     }
   };
 

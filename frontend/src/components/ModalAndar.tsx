@@ -34,7 +34,7 @@ async function handlePostAndar(
     setData(response.data);
     toast.success("Andar cadastrado com sucesso!");
   } catch {
-    toast.error("Erro ao cadastrar andar!");
+    toast.error("Erro ao cadastrar Andar!");
   }
 }
 
@@ -56,7 +56,7 @@ async function handlePutAndar(
     setData(response.data);
     toast.success("Andar atualizado com sucesso!");
   } catch {
-    toast.error("Erro ao atualizar andar!");
+    toast.error("Erro ao atualizar Andar!");
   }
 }
 
@@ -72,7 +72,7 @@ export default function ModalAndar({ isOpen, onClose, dataEdit, setData }) {
         const response = await apiClient.get("/blocos");
         setOpcoesBlocos(response.data);
       } catch {
-        toast.error("Erro ao buscar opções de blocos!");
+        toast.error("Erro ao buscar opções de Blocos!");
       }
     }
 

@@ -35,7 +35,7 @@ async function handlePostUser(
     const response = await apiClient.get("/users");
     setData(response.data);
   } catch {
-    toast.error("Erro ao cadastrar usuário!");
+    toast.error("Erro ao cadastrar Usuário!");
   }
 }
 
@@ -61,7 +61,7 @@ async function handlePutUser(
     const response = await apiClient.get("/users");
     setData(response.data);
   } catch (error) {
-    toast.error("Erro ao alterar usuário!");
+    toast.error("Erro ao alterar Usuário!");
   }
 }
 
