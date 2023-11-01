@@ -39,7 +39,8 @@ import {
   GetSalasPorPlantaBaixaController,
   CreateSalaController,
   UpdateSalaController,
-  DeleteSalaController
+  DeleteSalaController,
+  DeleteSalasPorPlantaBaixaController
 } from './controllers/sala/SalaController';
 
 const router = Router();
@@ -80,5 +81,6 @@ router.post('/salas', isAuthenticated, new CreateSalaController().handle);
 router.get('/salas', new GetSalasPorPlantaBaixaController().handle);
 router.put('/salas/:id', isAuthenticated, new UpdateSalaController().handle);
 router.delete('/salas/:id', isAuthenticated, new DeleteSalaController().handle);
+router.delete('/salas/planta_baixa/:planta_baixa_id', isAuthenticated, new DeleteSalasPorPlantaBaixaController().handle);
 
 export { router };

@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { CreateSalaService, GetSalasPorPlantaBaixaService, UpdateSalaService, DeleteSalaService } from "../../services/sala/SalaService";
+import { CreateSalaService, GetSalasPorPlantaBaixaService, UpdateSalaService, DeleteSalaService, DeleteSalasPorPlantaBaixaService } from "../../services/sala/SalaService";
 
 class CreateSalaController {
   async handle(req: Request, res: Response) {
-    const { descricao, planta_baixa_id, coordenada_x, coordenada_y } = req.body;
+    const { descricao, planta_baixa_id, coordenada_x, coordenada_y, numero } = req.body;
 
     const createSalaService = new CreateSalaService();
 
-    const sala = await createSalaService.execute({ descricao, planta_baixa_id, coordenada_x, coordenada_y });
+    const sala = await createSalaService.execute({ descricao, planta_baixa_id, coordenada_x, coordenada_y, numero });
 
     return res.json(sala);
   }
@@ -38,6 +38,18 @@ class UpdateSalaController {
   }
 }
 
+class DeleteSalasPorPlantaBaixaController {
+  async handle(req: Request, res: Response) {
+    const { planta_baixa_id } = req.params;
+
+    const deleteSalasPorPlantaBaixaService = new DeleteSalasPorPlantaBaixaService();
+
+    const sala = await deleteSalasPorPlantaBaixaService.execute(Number(planta_baixa_id));
+
+    return res.json(sala);
+  }
+}
+
 class DeleteSalaController {
   async handle(req: Request, res: Response) {
     const { id } = req.params;
@@ -54,5 +66,6 @@ export {
   CreateSalaController,
   GetSalasPorPlantaBaixaController,
   UpdateSalaController,
-  DeleteSalaController
+  DeleteSalaController,
+  DeleteSalasPorPlantaBaixaController
 }

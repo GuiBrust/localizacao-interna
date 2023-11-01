@@ -53,16 +53,18 @@ model PlantaBaixa {
 }
 
 model Sala {
-  id        Int      @id @default(autoincrement())
-  descricao String
-  coordenada_x String
-  coordenada_y String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                Int      @id @default(autoincrement())
+  descricao         String
+  coordenada_x      String
+  coordenada_y      String
+  numero            Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   planta_baixa PlantaBaixa @relation(fields: [planta_baixa_id], references: [id])
   planta_baixa_id   Int
 
+  @@unique([planta_baixa_id, numero])
   @@map("salas")
 }
 

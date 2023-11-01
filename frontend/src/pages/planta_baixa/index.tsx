@@ -57,6 +57,7 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
   const handleRemove = async (id: number) => {
     try {
       const apiClient = setupAPIClient();
+      await apiClient.delete('/salas/planta_baixa/' + id);
       await apiClient.delete("plantas_baixas/" + id);
       setDataList(dataList.filter((andar) => andar.id !== id));
       toast.success("Planta Baixa removido com sucesso!");
@@ -145,7 +146,7 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
             isOpen={isConfirmModalOpen}
             onClose={closeConfirmModal}
             title="Confirmação de Exclusão"
-            description="Tem certeza que deseja remover esta Planta Baixa?"
+            description="Tem certeza de que deseja excluir esta Planta Baixa? Ao fazer isso, todas as Salas vinculadas a ela também serão excluídas."
             onConfirm={() => {
               handleRemove(blockToDelete);
               closeConfirmModal();

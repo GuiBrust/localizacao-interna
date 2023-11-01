@@ -6,12 +6,13 @@ interface SalaRequest {
   planta_baixa_id: number;
   coordenada_x: string;
   coordenada_y: string;
+  numero: number;
 }
 
 class CreateSalaService {
-  async execute({ descricao, planta_baixa_id, coordenada_x, coordenada_y }: SalaRequest) {
+  async execute({ descricao, planta_baixa_id, coordenada_x, coordenada_y, numero }: SalaRequest) {
     const sala = await prismaClient.sala.create({
-      data: { descricao, planta_baixa_id, coordenada_x, coordenada_y }
+      data: { descricao, planta_baixa_id, coordenada_x, coordenada_y, numero }
     });
 
     return sala;
@@ -21,7 +22,8 @@ class CreateSalaService {
 class GetSalasPorPlantaBaixaService {
   async execute(planta_baixa_id: number) {
     const sala = await prismaClient.sala.findMany({
-      where: { planta_baixa_id }
+      where: { planta_baixa_id },
+      orderBy: { numero: 'asc' }
     });
 
     return sala;
@@ -33,6 +35,16 @@ class UpdateSalaService{
     const sala = await prismaClient.sala.update({
       where: { id },
       data: { descricao, coordenada_x, coordenada_y }
+    });
+
+    return sala;
+  }
+}
+
+class DeleteSalasPorPlantaBaixaService{
+  async execute(planta_baixa_id: number) {
+    const sala = await prismaClient.sala.deleteMany({
+      where: { planta_baixa_id }
     });
 
     return sala;
@@ -53,5 +65,6 @@ export {
   CreateSalaService,
   GetSalasPorPlantaBaixaService,
   UpdateSalaService,
-  DeleteSalaService
+  DeleteSalaService,
+  DeleteSalasPorPlantaBaixaService
 }

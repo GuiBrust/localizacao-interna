@@ -24,17 +24,25 @@ import Image from "next/image";
 import ImageMarker, { Marker } from "react-image-marker";
 
 async function cadastraSalas(id_planta_baixa: number, markers: Marker[]) {
+  const apiClient = setupAPIClient();
+
   try {
-    const apiClient = setupAPIClient();
-    markers.forEach(async (marker) => {
-      await apiClient.post("/salas", {
-        descricao: "Sala x",
-        planta_baixa_id: id_planta_baixa,
-        coordenada_x: String(marker.left),
-        coordenada_y: String(marker.top),
-      });
-    });
-  } catch {
+    await apiClient.delete(`/salas/planta_baixa/${id_planta_baixa}`);
+
+    await Promise.all(
+      markers.map(async (marker, indice) => {
+        await apiClient.post("/salas", {
+          descricao: "Sala x",
+          planta_baixa_id: id_planta_baixa,
+          coordenada_x: String(marker.left),
+          coordenada_y: String(marker.top),
+          numero: indice + 1,
+        });
+      })
+    );
+
+    toast.success("Salas cadastradas com sucesso!");
+  } catch (error) {
     toast.error("Erro ao cadastrar salas!");
   }
 }
@@ -100,8 +108,10 @@ export default function ModalPlantaBaixa({
     async function fetchSalas() {
       try {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get(`/salas?planta_baixa_id=${dataEdit.id}`);
-    
+        const response = await apiClient.get(
+          `/salas?planta_baixa_id=${dataEdit.id}`
+        );
+
         setMarkers(
           response.data.map((sala) => ({
             top: parseFloat(sala.coordenada_y),
@@ -128,6 +138,7 @@ export default function ModalPlantaBaixa({
     file: File,
     markers: Marker[]
   ) {
+    let response;
     try {
       const apiClient = setupAPIClient();
       const formData = new FormData();
@@ -137,13 +148,21 @@ export default function ModalPlantaBaixa({
       formData.append("file", file);
 
       await apiClient.post("/plantas_baixas", formData);
-
-      const response = await apiClient.get("/plantas_baixas");
-      setData(response.data);
       toast.success("Planta baixa cadastrada com sucesso!");
-    } catch {
+
+      response = await apiClient.get("/plantas_baixas");
+      setData(response.data);
+    } catch (error) {
       toast.error("Erro ao cadastrar planta baixa!");
+      onClose();
+      return;
     }
+
+    if (markers.length > 0) {
+      cadastraSalas(response.data.id, markers);
+    }
+
+    onClose();
   }
 
   async function handlePutPlantaBaixa(
@@ -165,17 +184,19 @@ export default function ModalPlantaBaixa({
 
       const response = await apiClient.get("/plantas_baixas");
       setData(response.data);
-
-      cadastraSalas(id, markers);
-
       toast.success("Planta baixa atualizada com sucesso!");
     } catch {
       toast.error("Erro ao atualizar planta baixa!");
+      onClose();
+      return;
+    }
+
+    if (markers.length > 0) {
+      cadastraSalas(id, markers);
     }
   }
 
   const [markers, setMarkers] = useState<Marker[]>([]);
-  console.log(markers);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full">
