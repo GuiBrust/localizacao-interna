@@ -11,7 +11,6 @@ datasource db {
 }
 
 
-// TODO nome deve ser obnrigatorio
 model Bloco {
   id        Int      @id @default(autoincrement())
   descricao String
@@ -41,11 +40,12 @@ model PlantaBaixa {
   id        Int      @id @default(autoincrement())
   descricao String
   imagem    String
+  marcacoesBloco String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  andar     Andar    @relation(fields: [andar_id], references: [id])
-  andar_id   Int
+  andar     Andar?    @relation(fields: [andar_id], references: [id])
+  andar_id   Int?
 
   salas     Sala[]
 

@@ -89,6 +89,8 @@ export default function Usuario({ users }: UsuarioProps) {
           <Button
             colorScheme="blue"
             onClick={() => [setDataEdit({}), onOpen()]}
+            mb={5}
+            ml={5}
           >
             Adicionar
           </Button>

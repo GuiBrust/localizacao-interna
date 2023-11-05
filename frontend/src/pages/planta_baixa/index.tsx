@@ -83,6 +83,8 @@ export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
           <Button
             colorScheme="blue"
             onClick={() => [setDataEdit({}), onOpen()]}
+            mb={5}
+            ml={5}
           >
             Adicionar
           </Button>

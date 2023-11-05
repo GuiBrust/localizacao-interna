@@ -6,13 +6,19 @@ interface PlantaBaixaRequest {
   descricao: string;
   imagem: string;
   andar_id: number;
+  marcacoesBloco: string;
 }
 
 class CreatePlantaBaixaService {
-  async execute({ descricao, imagem, andar_id }: PlantaBaixaRequest) {
-    const planta_baixa = await prismaClient.plantaBaixa.create({
-      data: { descricao, imagem, andar_id },
-    });
+  async execute({ descricao, imagem, andar_id, marcacoesBloco }: PlantaBaixaRequest) {
+    const data = {
+      descricao,
+      imagem,
+      andar_id: andar_id || null,
+      marcacoesBloco: marcacoesBloco || null,
+    };
+
+    const planta_baixa = await prismaClient.plantaBaixa.create({data});
 
     return planta_baixa;
   }
@@ -21,6 +27,7 @@ class CreatePlantaBaixaService {
 class GetPlantasBaixasService {
   async execute() {
     const planta_baixa = await prismaClient.plantaBaixa.findMany({
+      where: { andar_id: { not: null } },
       include: { salas: true, andar: { include: { bloco: true } } },
       orderBy: { id: "desc" },
     });

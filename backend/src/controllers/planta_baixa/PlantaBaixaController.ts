@@ -9,7 +9,7 @@ import {
 
 class CreatePlantaBaixaController {
   async handle(req: Request, res: Response) {
-    const { descricao, andar_id } = req.body;
+    const { descricao, andar_id, marcacoesBloco } = req.body;
 
     const createPlantaBaixaService = new CreatePlantaBaixaService();
     const andar = Number(andar_id);
@@ -20,13 +20,15 @@ class CreatePlantaBaixaController {
       const planta_baixa = await createPlantaBaixaService.execute({
         descricao,
         imagem: req.file.filename,
-        andar_id: andar
+        andar_id: andar || null,
+        marcacoesBloco: marcacoesBloco || null,
       });
 
       return res.json(planta_baixa);
     }
   }
 }
+
 
 class GetPlantasBaixasController {
   async handle(req: Request, res: Response) {

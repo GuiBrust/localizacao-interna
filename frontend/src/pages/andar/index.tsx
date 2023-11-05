@@ -81,6 +81,8 @@ export default function Andar({ data }: AndarProps) {
         <Box maxW={1200} w="100%" h="100vh" py={10} px={2}>
           <Button
             colorScheme="blue"
+            mb={5}
+            ml={5}
             onClick={() => {
               setDataEdit({});
               onOpen();

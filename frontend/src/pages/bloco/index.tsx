@@ -81,6 +81,8 @@ export default function Bloco({ data }: BlocoProps) {
           <Button
             colorScheme="blue"
             onClick={() => [setDataEdit({}), onOpen()]}
+            mb={5}
+            ml={5}
           >
             Adicionar
           </Button>
