@@ -17,11 +17,9 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
 import { toast } from "react-toastify";
@@ -29,7 +27,6 @@ import { useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
 import styles from "./styles.module.scss";
 import { FcAddImage } from "react-icons/fc";
-import Image from "next/image";
 import ImageMarker, { Marker } from "react-image-marker";
 import { DeleteIcon } from "@chakra-ui/icons";
 

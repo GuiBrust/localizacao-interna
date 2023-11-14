@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <AuthProvider>
       <ChakraProvider>
         <Component {...pageProps} />
-        <ToastContainer autoClose={3000} />
+        <ToastContainer limit={5} autoClose={3000} />
       </ChakraProvider>
     </AuthProvider>
   )

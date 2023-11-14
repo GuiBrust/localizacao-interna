@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   CreatePlantaBaixaService,
   GetPlantasBaixasService,
+  GetBlocoPlantasBaixasService,
   GetPlantaBaixaByIdService,
   UpdatePlantaBaixaService,
   DeletePlantaBaixaService
@@ -40,6 +41,16 @@ class GetPlantasBaixasController {
   }
 }
 
+class GetBlocoPlantasBaixasController {
+  async handle(req: Request, res: Response) {
+    const getBlocoPlantasBaixasService = new GetBlocoPlantasBaixasService();
+
+    const planta_baixa = await getBlocoPlantasBaixasService.execute();
+
+    return res.json(planta_baixa);
+  }
+}
+
 class GetPlantaBaixaByIdController {
   async handle(req: Request, res: Response) {
     const { id } = req.params;
@@ -55,7 +66,7 @@ class GetPlantaBaixaByIdController {
 class UpdatePlantaBaixaController {
   async handle(req: Request, res: Response) {
     const { id } = req.params;
-    const { descricao, andar_id } = req.body;
+    const { descricao, andar_id, marcacoesBloco } = req.body;
 
     const updatePlantaBaixaService = new UpdatePlantaBaixaService();
 
@@ -67,13 +78,15 @@ class UpdatePlantaBaixaController {
           Number(id),
           descricao,
           req.file.filename,
-          Number(andar_id)
+          Number(andar_id),
+          marcacoesBloco
         );
       } else {
         planta_baixa = await updatePlantaBaixaService.executeWithoutImage(
           Number(id),
           descricao,
-          Number(andar_id)
+          Number(andar_id),
+          marcacoesBloco
         );
       }
 
@@ -99,6 +112,7 @@ class DeletePlantaBaixaController {
 export {
   CreatePlantaBaixaController,
   GetPlantasBaixasController,
+  GetBlocoPlantasBaixasController,
   GetPlantaBaixaByIdController,
   UpdatePlantaBaixaController,
   DeletePlantaBaixaController

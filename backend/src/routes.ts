@@ -29,6 +29,7 @@ import {
 
 import {
   GetPlantasBaixasController,
+  GetBlocoPlantasBaixasController,
   GetPlantaBaixaByIdController,
   UpdatePlantaBaixaController,
   DeletePlantaBaixaController,
@@ -72,6 +73,7 @@ router.delete('/andares/:id', isAuthenticated, new DeleteAndarController().handl
 // ROTAS DE PLANTA BAIXA
 router.post('/plantas_baixas', isAuthenticated, upload.single('file'), new CreatePlantaBaixaController().handle);
 router.get('/plantas_baixas', new GetPlantasBaixasController().handle);
+router.get('/plantas_baixas_bloco', new GetBlocoPlantasBaixasController().handle);
 router.get('/plantas_baixas/:id', new GetPlantaBaixaByIdController().handle);
 router.put('/plantas_baixas/:id', upload.single('file'), isAuthenticated, new UpdatePlantaBaixaController().handle);
 router.delete('/plantas_baixas/:id', isAuthenticated, new DeletePlantaBaixaController().handle);

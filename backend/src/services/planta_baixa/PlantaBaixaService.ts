@@ -5,7 +5,7 @@ import path from "path";
 interface PlantaBaixaRequest {
   descricao: string;
   imagem: string;
-  andar_id: number;
+  andar_id: number | null;
   marcacoesBloco: string;
 }
 
@@ -36,6 +36,17 @@ class GetPlantasBaixasService {
   }
 }
 
+class GetBlocoPlantasBaixasService {
+  async execute() {
+    const planta_baixa = await prismaClient.plantaBaixa.findFirst({
+      where: { andar_id: null },
+      orderBy: { id: "desc" },
+    });
+
+    return planta_baixa;
+  }
+}
+
 class GetPlantaBaixaByIdService {
   async execute(id: number) {
     const planta_baixa = await prismaClient.plantaBaixa.findUnique({
@@ -52,7 +63,8 @@ class UpdatePlantaBaixaService {
     id: number,
     descricao: string,
     imagem: string,
-    andar_id: number
+    andar_id: number,
+    marcacoesBloco: string
   ) {
     const imagem_antiga = await prismaClient.plantaBaixa.findUnique({
        where: { id },
@@ -61,7 +73,7 @@ class UpdatePlantaBaixaService {
 
     const planta_baixa = await prismaClient.plantaBaixa.update({
       where: { id },
-      data: { descricao, imagem, andar_id },
+      data: { descricao, imagem, andar_id, marcacoesBloco },
     });
 
     fs.unlinkSync(
@@ -71,10 +83,10 @@ class UpdatePlantaBaixaService {
     return planta_baixa;
   }
 
-  async executeWithoutImage(id: number, descricao: string, andar_id: number) {
+  async executeWithoutImage(id: number, descricao: string, andar_id: number, marcacoesBloco: string) {
     const planta_baixa = await prismaClient.plantaBaixa.update({
       where: { id },
-      data: { descricao, andar_id },
+      data: { descricao, andar_id, marcacoesBloco },
     });
 
     return planta_baixa;
@@ -98,6 +110,7 @@ class DeletePlantaBaixaService {
 export {
   CreatePlantaBaixaService,
   GetPlantasBaixasService,
+  GetBlocoPlantasBaixasService,
   GetPlantaBaixaByIdService,
   UpdatePlantaBaixaService,
   DeletePlantaBaixaService,
