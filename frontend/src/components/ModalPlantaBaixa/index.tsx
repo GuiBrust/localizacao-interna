@@ -9,6 +9,7 @@ import {
   ModalCloseButton,
   Button,
   Flex,
+  Stack,
   FormControl,
   FormLabel,
   Input,
@@ -272,7 +273,7 @@ export default function ModalPlantaBaixa({
               </FormControl>
             </Box>
           </Flex>
-          <Flex>
+          <Stack direction={{ base: "column", md: "row", lg: "row" }} spacing={4}>
             <Box flex={2} m={2}>
               <label className={styles.label}>Imagem</label>
               <label className={styles.labelImage}>
@@ -346,7 +347,7 @@ export default function ModalPlantaBaixa({
                 </Table>
               </TableContainer>
             </Box>
-          </Flex>
+          </Stack>
         </ModalBody>
 
         <ModalFooter>

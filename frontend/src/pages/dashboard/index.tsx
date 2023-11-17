@@ -50,7 +50,7 @@ async function handlePutPlantaBaixa(id: string, file: File, markers: Marker[]) {
     formData.append("descricao", "Imagem ");
 
     await apiClient.put("/plantas_baixas/" + id, formData);
-    
+
     toast.success("Imagem Campus cadastrada com sucesso!");
   } catch {
     toast.error("Erro ao atualizar Planta Baixa!");
@@ -58,7 +58,11 @@ async function handlePutPlantaBaixa(id: string, file: File, markers: Marker[]) {
   }
 }
 
-async function validaFormulario(file: File, markers: Marker[], isUpdate: boolean) {
+async function validaFormulario(
+  file: File,
+  markers: Marker[],
+  isUpdate: boolean
+) {
   let valido = true;
 
   if (!isUpdate && !file) {
@@ -119,7 +123,9 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
   const [imageProd, setImage] = useState(null);
   const [opcoes_blocos, setOpcoesBlocos] = useState([]);
   const [markers, setMarkers] = useState<Marker[]>([]);
-  const [planta_baixa_id, setPlantaBaixaId] = useState(planta_baixa?.id ?? null);
+  const [planta_baixa_id, setPlantaBaixaId] = useState(
+    planta_baixa?.id ?? null
+  );
 
   useEffect(() => {
     async function fetchBlocos() {
@@ -160,18 +166,17 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
   async function handlePostPlantaBaixa(file: File, markers: Marker[]) {
     let response;
     try {
-      
       const apiClient = setupAPIClient();
       const formData = new FormData();
-  
+
       formData.append("marcacoesBloco", JSON.stringify(markers));
       formData.append("file", file);
       formData.append("descricao", "Imagem Campus");
-  
+
       response = await apiClient.post("/plantas_baixas", formData);
       const plantaBaixa = response.data;
       setPlantaBaixaId(plantaBaixa.id);
-  
+
       toast.success("Imagem Campus cadastrada com sucesso!");
     } catch (error) {
       toast.error("Erro ao cadastrar Planta Baixa!");
@@ -186,7 +191,7 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
       </Head>
       <div>
         <Header />
-        <Flex>
+        <Stack direction={{ base: "column", md: "row", lg: "row" }} spacing={4}>
           <Box flex={2} m={2} p="5">
             <label>Imagem Campus</label>
             <label className={styles.labelImage}>
@@ -265,21 +270,29 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
               </Table>
             </TableContainer>
           </Box>
-        </Flex>
+        </Stack>
         <Flex>
           <Box ml="5">
             <Button
               colorScheme="blue"
               mr={3}
               onClick={async () => {
-                const isValid = await validaFormulario(imageProd, markers, !!planta_baixa_id);
-              
+                const isValid = await validaFormulario(
+                  imageProd,
+                  markers,
+                  !!planta_baixa_id
+                );
+
                 if (!isValid) {
                   return;
                 }
-              
+
                 if (planta_baixa_id) {
-                  await handlePutPlantaBaixa(planta_baixa_id, imageProd, markers);
+                  await handlePutPlantaBaixa(
+                    planta_baixa_id,
+                    imageProd,
+                    markers
+                  );
                 } else {
                   await handlePostPlantaBaixa(imageProd, markers);
                 }
