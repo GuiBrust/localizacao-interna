@@ -35,3 +35,20 @@
 .label{
   font-weight: 500;
 }
+
+.labelContainer {
+  max-width: 100%;
+  margin-bottom: 10px;
+}
+
+.imageContainer {
+  max-width: 100%;
+  max-height: 75vh;
+  overflow-y: auto;
+}
+
+.tableContainer {
+  max-width: 100%;
+  max-height: 75vh;
+  overflow-y: auto;
+}

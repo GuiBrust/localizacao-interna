@@ -273,9 +273,13 @@ export default function ModalPlantaBaixa({
               </FormControl>
             </Box>
           </Flex>
+          <Flex mt={3} ml={2}>
+          <Box>
+            <label className={styles.label}>Imagem</label>
+          </Box>
+        </Flex>
           <Stack direction={{ base: "column", md: "row", lg: "row" }} spacing={4}>
-            <Box flex={2} m={2}>
-              <label className={styles.label}>Imagem</label>
+            <Box className={styles.imageContainer} flex={2} m={2}>
               <label className={styles.labelImage}>
                 <span
                   onClick={() => document.getElementById("fileInput").click()}
@@ -303,7 +307,7 @@ export default function ModalPlantaBaixa({
                 onChange={handleFile}
               />
             </Box>
-            <Box flex={1} m={2}>
+            <Box className={styles.tableContainer} flex={1} m={2}>
               <TableContainer>
                 <Table>
                   <Thead>

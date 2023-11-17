@@ -191,9 +191,13 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
       </Head>
       <div>
         <Header />
+        <Flex mt={5} ml={7}>
+          <Box>
+            <h1>Imagem Campus</h1>
+          </Box>
+        </Flex>
         <Stack direction={{ base: "column", md: "row", lg: "row" }} spacing={4}>
-          <Box flex={2} m={2} p="5">
-            <label>Imagem Campus</label>
+          <Box className={styles.imageContainer} flex={2} m={2} mt={0} p="5">
             <label className={styles.labelImage}>
               <span
                 onClick={() => document.getElementById("fileInput").click()}
@@ -221,7 +225,7 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
               onChange={handleFile}
             />
           </Box>
-          <Box flex={1} m={2} p="5">
+          <Box className={styles.tableContainer} flex={1} m={2} p="5">
             <TableContainer>
               <Table>
                 <Thead>
@@ -272,10 +276,10 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
           </Box>
         </Stack>
         <Flex>
-          <Box ml="5">
+          <Box ml="4">
             <Button
               colorScheme="blue"
-              mr={3}
+              m={3}
               onClick={async () => {
                 const isValid = await validaFormulario(
                   imageProd,
