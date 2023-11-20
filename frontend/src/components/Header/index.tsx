@@ -81,6 +81,7 @@ export function Header() {
               <NavLink href="/bloco">Bloco</NavLink>
               <NavLink href="/andar">Andar</NavLink>
               <NavLink href="/planta_baixa">Planta Baixa</NavLink>
+              <NavLink href="/imagem_campus">Imagem Campus</NavLink>
             </HStack>
           </HStack>
           <button className={styles.botaoSair} onClick={signOut}>
@@ -95,6 +96,7 @@ export function Header() {
               <NavLink href="/bloco">Bloco</NavLink>
               <NavLink href="/andar">Andar</NavLink>
               <NavLink href="/planta_baixa">Planta Baixa</NavLink>
+              <NavLink href="/imagem_campus">Imagem Campus</NavLink>
             </Stack>
           </Box>
         ) : null}

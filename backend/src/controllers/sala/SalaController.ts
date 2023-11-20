@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateSalaService, GetSalasPorPlantaBaixaService, UpdateSalaService, DeleteSalaService, DeleteSalasPorPlantaBaixaService } from "../../services/sala/SalaService";
+import { CreateSalaService, GetSalasPorPlantaBaixaService, GetSalasService, UpdateSalaService, DeleteSalaService, DeleteSalasPorPlantaBaixaService } from "../../services/sala/SalaService";
 
 class CreateSalaController {
   async handle(req: Request, res: Response) {
@@ -20,6 +20,16 @@ class GetSalasPorPlantaBaixaController {
     const getSalasPorPlantaBaixaService = new GetSalasPorPlantaBaixaService();
 
     const sala = await getSalasPorPlantaBaixaService.execute(Number(planta_baixa_id));
+
+    return res.json(sala);
+  }
+}
+
+class GetSalasController {
+  async handle(req: Request, res: Response) {
+    const getSalasService = new GetSalasService();
+
+    const sala = await getSalasService.execute();
 
     return res.json(sala);
   }
@@ -65,6 +75,7 @@ class DeleteSalaController {
 export {
   CreateSalaController,
   GetSalasPorPlantaBaixaController,
+  GetSalasController,
   UpdateSalaController,
   DeleteSalaController,
   DeleteSalasPorPlantaBaixaController

@@ -38,6 +38,7 @@ import {
 
 import {
   GetSalasPorPlantaBaixaController,
+  GetSalasController,
   CreateSalaController,
   UpdateSalaController,
   DeleteSalaController,
@@ -84,5 +85,6 @@ router.get('/salas', new GetSalasPorPlantaBaixaController().handle);
 router.put('/salas/:id', isAuthenticated, new UpdateSalaController().handle);
 router.delete('/salas/:id', isAuthenticated, new DeleteSalaController().handle);
 router.delete('/salas/planta_baixa/:planta_baixa_id', isAuthenticated, new DeleteSalasPorPlantaBaixaController().handle);
+router.get('/salas/all', new GetSalasController().handle);
 
 export { router };
