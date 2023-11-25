@@ -39,7 +39,7 @@ export default function Dashboard({ salas }: Sala) {
     { field: "col1", headerName: "ID", width: 100 },
     { field: "col2", headerName: "Sala", width: 150 },
     { field: "col3", headerName: "Número", width: 150 },
-    { field: "col4", headerName: "Planta Baixa", width: 150 },
+    { field: "col4", headerName: "Planta Baixa", width: 200 },
     { field: "col5", headerName: "Andar", width: 150 },
     { field: "col6", headerName: "Bloco", width: 150 },
     { field: "col7", headerName: "QrCode", width: 150 },
