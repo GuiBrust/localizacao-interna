@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 import React from "react";
 import { DataGrid, GridRowsProp, GridColDef, ptBR } from "@mui/x-data-grid";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 interface Bloco {
   id: number;
@@ -64,12 +65,25 @@ export default function Dashboard({ salas }: Sala) {
         <title>Dashboard</title>
       </Head>
       <Header />
-      <DataGrid
-        autoHeight
-        rows={rows}
-        columns={columns}
-        localeText={ptBR.props.MuiDataGrid.localeText}
-      />
+      <Tabs>
+        <TabList>
+          <Tab>Salas</Tab>
+          <Tab>Campus</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <DataGrid
+              autoHeight
+              rows={rows}
+              columns={columns}
+              localeText={ptBR.props.MuiDataGrid.localeText}
+            />
+          </TabPanel>
+          <TabPanel>
+            {/* TODO implementar lista de marcações do campus */}
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </>
   );
 }
