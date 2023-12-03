@@ -36,8 +36,10 @@ interface Sala {
 }
 
 export default function Dashboard({ salas }: Sala) {
+  const [campusData, setCampusData] = useState([]);
+  const [campusDataLoaded, setCampusDataLoaded] = useState(false);
+
   const columns: GridColDef[] = [
-    { field: "col1", headerName: "ID", width: 100 },
     { field: "col2", headerName: "Sala", width: 150 },
     { field: "col3", headerName: "Número", width: 150 },
     { field: "col4", headerName: "Planta Baixa", width: 200 },
@@ -46,10 +48,14 @@ export default function Dashboard({ salas }: Sala) {
     { field: "col7", headerName: "QrCode", width: 150 },
   ];
 
+  const columnsCampus: GridColDef[] = [
+    { field: "col1", headerName: "Bloco", width: 150 },
+    { field: "col2", headerName: "QrCode", width: 150 },
+  ];
+
   const rows: GridRowsProp = salas.map((sala) => {
     return {
       id: sala.id,
-      col1: sala.id,
       col2: sala.descricao,
       col3: sala.numero,
       col4: sala.planta_baixa.descricao,
@@ -58,6 +64,34 @@ export default function Dashboard({ salas }: Sala) {
       col7: "QrCode",
     };
   });
+
+  const fetchCampusData = async () => {
+    try {
+      const apiClient = setupAPIClient();
+      const response = await apiClient.get("/plantas_baixas_bloco");
+
+      const data = await response.data;
+
+      const rowsCampus: GridRowsProp = JSON.parse(data.marcacoesBloco).map((item, index) => {
+        return {
+          id: index,
+          col1: item.bloco_id,
+          col2: "QrCode",
+        };
+      });
+
+      setCampusData(rowsCampus);
+      setCampusDataLoaded(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCampusTabClick = () => {
+    if (!campusDataLoaded) {
+      fetchCampusData();
+    }
+  };
 
   return (
     <>
@@ -68,7 +102,7 @@ export default function Dashboard({ salas }: Sala) {
       <Tabs>
         <TabList>
           <Tab>Salas</Tab>
-          <Tab>Campus</Tab>
+          <Tab onClick={handleCampusTabClick}>Campus</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -80,7 +114,16 @@ export default function Dashboard({ salas }: Sala) {
             />
           </TabPanel>
           <TabPanel>
-            {/* TODO implementar lista de marcações do campus */}
+            {campusDataLoaded ? (
+              <DataGrid
+                autoHeight
+                rows={campusData}
+                columns={columnsCampus}
+                localeText={ptBR.props.MuiDataGrid.localeText}
+              />
+            ) : (
+              <p>Carregando dados do campus...</p>
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>
