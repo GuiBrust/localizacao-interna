@@ -37,7 +37,6 @@ interface Sala {
 
 export default function Dashboard({ salas }: Sala) {
   const [campusData, setCampusData] = useState([]);
-  const [campusDataLoaded, setCampusDataLoaded] = useState(false);
 
   const columns: GridColDef[] = [
     { field: "col2", headerName: "Sala", width: 150 },
@@ -70,28 +69,27 @@ export default function Dashboard({ salas }: Sala) {
       const apiClient = setupAPIClient();
       const response = await apiClient.get("/plantas_baixas_bloco");
 
-      const data = await response.data;
+      const data = response.data;
 
-      const rowsCampus: GridRowsProp = JSON.parse(data.marcacoesBloco).map((item, index) => {
-        return {
-          id: index,
-          col1: item.bloco_id,
-          col2: "QrCode",
-        };
-      });
+      const rowsCampus: GridRowsProp = JSON.parse(data.marcacoesBloco).map(
+        (item, index) => {
+          return {
+            id: index,
+            col1: item.bloco_id,
+            col2: "QrCode",
+          };
+        }
+      );
 
       setCampusData(rowsCampus);
-      setCampusDataLoaded(true);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleCampusTabClick = () => {
-    if (!campusDataLoaded) {
-      fetchCampusData();
-    }
-  };
+  useEffect(() => {
+    fetchCampusData();
+  }, []);
 
   return (
     <>
@@ -102,7 +100,7 @@ export default function Dashboard({ salas }: Sala) {
       <Tabs>
         <TabList>
           <Tab>Salas</Tab>
-          <Tab onClick={handleCampusTabClick}>Campus</Tab>
+          <Tab>Campus</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -114,15 +112,13 @@ export default function Dashboard({ salas }: Sala) {
             />
           </TabPanel>
           <TabPanel>
-            {campusDataLoaded ? (
+            {campusData.length > 0 && (
               <DataGrid
                 autoHeight
                 rows={campusData}
                 columns={columnsCampus}
                 localeText={ptBR.props.MuiDataGrid.localeText}
               />
-            ) : (
-              <p>Carregando dados do campus...</p>
             )}
           </TabPanel>
         </TabPanels>
