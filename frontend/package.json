@@ -20,6 +20,7 @@
     "browserslist": "^4.21.0",
     "caniuse-lite": "^1.0.30001517",
     "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
     "framer-motion": "^6",
     "jwt-decode": "^3.1.2",
     "next": "12.1.0",

@@ -6,7 +6,16 @@ import { useEffect, useState } from "react";
 
 import React from "react";
 import { DataGrid, GridRowsProp, GridColDef, ptBR } from "@mui/x-data-grid";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import {
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Button,
+} from "@chakra-ui/react";
+import geraPDF from "../../components/MyDocument";
+import styles from "./styles.module.scss";
 
 interface Bloco {
   id: number;
@@ -35,6 +44,28 @@ interface Sala {
   planta_baixa: PlantaBaixa;
 }
 
+const renderGerarQrCode = (params: any) => {
+  if (params.tipo == "salas") {
+    var nome = `Bloco: ${params.col6}, Andar: ${params.col5}, Sala: ${params.col2}`;
+  } else {
+    var nome = `Bloco: ${params.col1}`;
+  }
+
+  return (
+    <Button
+      colorScheme="blue"
+      onClick={(e) =>
+        geraPDF({
+          nome: nome,
+          linkQrCode: `http://${window.location.host}/busca_sala?sala_id=${params.id}?tipo=${params.tipo}`,
+        })
+      }
+    >
+      Gerar QrCode
+    </Button>
+  );
+};
+
 export default function Dashboard({ salas }: Sala) {
   const [campusData, setCampusData] = useState([]);
 
@@ -44,12 +75,32 @@ export default function Dashboard({ salas }: Sala) {
     { field: "col4", headerName: "Planta Baixa", width: 200 },
     { field: "col5", headerName: "Andar", width: 150 },
     { field: "col6", headerName: "Bloco", width: 150 },
-    { field: "col7", headerName: "QrCode", width: 150 },
+    {
+      field: "col7",
+      headerName: "QrCode",
+      sortable: false,
+      filterable: false,
+      width: 150,
+      renderCell: (params) => {
+        params.row.tipo = "salas";
+        return renderGerarQrCode(params.row);
+      },
+    },
   ];
 
   const columnsCampus: GridColDef[] = [
     { field: "col1", headerName: "Bloco", width: 150 },
-    { field: "col2", headerName: "QrCode", width: 150 },
+    {
+      field: "col2",
+      headerName: "QrCode",
+      width: 150,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => {
+        params.row.tipo = "campus";
+        return renderGerarQrCode(params.row);
+      },
+    },
   ];
 
   const rows: GridRowsProp = salas.map((sala) => {
@@ -60,7 +111,6 @@ export default function Dashboard({ salas }: Sala) {
       col4: sala.planta_baixa.descricao,
       col5: sala.planta_baixa.andar.descricao,
       col6: sala.planta_baixa.andar.bloco.descricao,
-      col7: "QrCode",
     };
   });
 
@@ -76,7 +126,6 @@ export default function Dashboard({ salas }: Sala) {
           return {
             id: index,
             col1: item.bloco_id,
-            col2: "QrCode",
           };
         }
       );
