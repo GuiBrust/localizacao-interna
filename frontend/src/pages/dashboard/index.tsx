@@ -57,7 +57,7 @@ const renderGerarQrCode = (params: any) => {
       onClick={(e) =>
         geraPDF({
           nome: nome,
-          linkQrCode: `http://${window.location.host}/busca_sala?sala_id=${params.id}?tipo=${params.tipo}`,
+          linkQrCode: `http://${window.location.host}/busca_sala?sala_id=${params.id}&tipo=${params.tipo}`,
         })
       }
     >
