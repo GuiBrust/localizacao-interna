@@ -125,7 +125,8 @@ export default function Dashboard({ salas }: Sala) {
         (item, index) => {
           return {
             id: index,
-            col1: item.bloco_id,
+            col1: item.descricao_bloco,
+            bloco_id: item.bloco_id,
           };
         }
       );

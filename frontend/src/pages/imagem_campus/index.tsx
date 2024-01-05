@@ -241,6 +241,8 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
                           onChange={(e) => {
                             const updatedMarkers = [...markers];
                             updatedMarkers[index].bloco_id = e.target.value;
+                            updatedMarkers[index].descricao_bloco =
+                              e.target[e.target.selectedIndex].text;
                             setMarkers(updatedMarkers);
                           }}
                         >

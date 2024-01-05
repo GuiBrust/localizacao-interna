@@ -23,8 +23,8 @@ async function geraPDF(info) {
         alignment: "center",
         margin: [0, 0, 0, 20],
       },
-      { text: "Localizador de Ambientes", style: "header" },
-      { text: `Nome do Ambiente: ${nome}`, style: "subheader" },
+      { text: "Localizar Ambientes", style: "header" },
+      { text: `${nome}`, style: "subheader" },
       {
         qr: linkQrCode,
         eccLevel: "H",
