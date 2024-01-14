@@ -18,7 +18,7 @@ import Image from "next/image";
 import { FiLogOut } from "react-icons/fi";
 import { useContext } from "react";
 import Link from "next/link";
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
 
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -63,14 +63,12 @@ export function Header() {
           />
           <HStack spacing={8} alignItems={"center"}>
             <Link href="/dashboard" passHref>
-              <a>
-                <Image
-                  src="/header.png"
-                  alt="Dashboard"
-                  width={230}
-                  height={50}
-                />
-              </a>
+              <Image
+                src="/header.png"
+                alt="Dashboard"
+                width={230}
+                height={50}
+              />
             </Link>
             <HStack
               as={"nav"}
