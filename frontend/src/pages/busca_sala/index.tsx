@@ -1,21 +1,38 @@
 import Head from "next/head";
-
-import { Header } from "../../components/Header";
+import Select from "react-select";
 
 export default function BuscaSala() {
+  // Opções fictícias para o Select
+  const options = [
+    {
+      label: "Salas",
+      options: [
+        { value: "1", label: "Sala 101" },
+        { value: "2", label: "Sala 102" },
+      ],
+    },
+    {
+      label: "Externos",
+      options: [
+        { value: "1", label: "Bloco B" },
+        { value: "2", label: "Bloco S" },
+      ],
+    },
+  ];
+
   return (
     <>
       <Head>
         <title>Busca Sala</title>
       </Head>
       <div>
-        <Header />
+        <Select options={options} placeholder="Buscar..." />
       </div>
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
   const salaId = ctx.query.sala_id as string;
   const tipo = ctx.query.tipo as string;
 
