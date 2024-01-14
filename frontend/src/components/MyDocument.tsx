@@ -40,6 +40,7 @@ async function geraPDF(info) {
         ],
         margin: [0, 0, 0, 20],
       },
+      { link: linkQrCode, text: linkQrCode, style: "subheader" },
       { text: data, style: "footer", alignment: "center" },
     ],
 
