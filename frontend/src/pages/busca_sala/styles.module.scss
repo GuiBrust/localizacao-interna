@@ -1,0 +1,8 @@
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; // Espalha os conteúdos verticalmente
+  height: 100vh; // A altura total da tela
+  padding: 20px; // Espaçamento interno
+  box-sizing: border-box; // Garante que o padding não adicione largura extra
+}

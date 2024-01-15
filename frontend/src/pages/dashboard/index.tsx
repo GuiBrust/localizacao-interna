@@ -15,7 +15,6 @@ import {
   Button,
 } from "@chakra-ui/react";
 import geraPDF from "../../components/MyDocument";
-import styles from "./styles.module.scss";
 
 interface Bloco {
   id: number;
@@ -122,11 +121,10 @@ export default function Dashboard({ salas }: Sala) {
       const data = response.data;
 
       const rowsCampus: GridRowsProp = JSON.parse(data.marcacoesBloco).map(
-        (item, index) => {
+        (item) => {
           return {
-            id: index,
+            id: item.bloco_id,
             col1: item.descricao_bloco,
-            bloco_id: item.bloco_id,
           };
         }
       );

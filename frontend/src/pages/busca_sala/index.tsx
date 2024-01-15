@@ -1,6 +1,8 @@
 import Head from "next/head";
 import Select from "react-select";
+import { Button } from "@chakra-ui/react";
 import { setupAPIClient } from "../../services/api";
+import styles from "./styles.module.scss";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   const salaOptions = plantas_baixas.flatMap((planta_baixa) =>
@@ -26,7 +28,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     },
   ];
 
-  const defaultOption =
+  const currentLocation =
     options
       .flatMap((group) => group.options)
       .find((option) => option.value == id_tipo) || null;
@@ -36,13 +38,32 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
       <Head>
         <title>Busca Sala</title>
       </Head>
-      <div>
+      <form className={styles.searchContainer}>
+        <div className={styles.imageContainer} role="img">
+          <img
+            src="https://conteudo.123projetei.com/wp-content/uploads/2021/06/planta-baixa-tecnica-1.jpg"
+            alt="Mapa"
+          />
+        </div>
         <Select
+          id="localizacao-atual"
           options={options}
-          defaultValue={defaultOption}
-          placeholder="Buscar..."
+          value={currentLocation}
+          onChange={(e) => setCurrentLocation(e.target.value)}
+          placeholder="Localização Atual"
+          className={styles.select}
         />
-      </div>
+        <Select
+          id="destino-desejado"
+          options={options}
+          onChange={(e) => setDesiredDestination(e.target.value)}
+          placeholder="Destino Desejado"
+          className={styles.select}
+        />
+        <Button type="submit" colorScheme="green" className="submit-button">
+          Buscar
+        </Button>
+      </form>
     </>
   );
 }
