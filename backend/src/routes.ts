@@ -33,7 +33,8 @@ import {
   GetPlantaBaixaByIdController,
   UpdatePlantaBaixaController,
   DeletePlantaBaixaController,
-  CreatePlantaBaixaController
+  CreatePlantaBaixaController,
+  GetPlantasBaixasImagensController,
 } from './controllers/planta_baixa/PlantaBaixaController';
 
 import {
@@ -78,6 +79,7 @@ router.get('/plantas_baixas_bloco', new GetBlocoPlantasBaixasController().handle
 router.get('/plantas_baixas/:id', new GetPlantaBaixaByIdController().handle);
 router.put('/plantas_baixas/:id', upload.single('file'), isAuthenticated, new UpdatePlantaBaixaController().handle);
 router.delete('/plantas_baixas/:id', isAuthenticated, new DeletePlantaBaixaController().handle);
+router.get('/plantas_baixas/busca_imagens', new GetPlantasBaixasImagensController().handle);
 
 // ROTAS DE SALA
 router.post('/salas', isAuthenticated, new CreateSalaController().handle);

@@ -30,7 +30,6 @@ class CreatePlantaBaixaController {
   }
 }
 
-
 class GetPlantasBaixasController {
   async handle(req: Request, res: Response) {
     const getPlantasBaixasService = new GetPlantasBaixasService();
@@ -92,7 +91,9 @@ class UpdatePlantaBaixaController {
 
       return res.json(planta_baixa);
     } catch (error) {
-      return res.status(500).json({ message: 'Erro ao atualizar a planta baixa' });
+      return res
+        .status(500)
+        .json({ message: "Erro ao atualizar a planta baixa" });
     }
   }
 }
@@ -109,11 +110,24 @@ class DeletePlantaBaixaController {
   }
 }
 
+class GetPlantasBaixasImagensController {
+  // TODO vai receber id de localizacao atual e da localização desejada
+  // verifica se
+  // atual x destino
+  // mesmo bloco e mesmo andar
+  // mesmo bloco e andar diferente
+  // bloco diferente
+  async handle(req: Request, res: Response) {
+    
+  }
+}
+
 export {
   CreatePlantaBaixaController,
   GetPlantasBaixasController,
   GetBlocoPlantasBaixasController,
   GetPlantaBaixaByIdController,
   UpdatePlantaBaixaController,
-  DeletePlantaBaixaController
-}
+  DeletePlantaBaixaController,
+  GetPlantasBaixasImagensController,
+};

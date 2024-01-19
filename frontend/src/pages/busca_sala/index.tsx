@@ -2,6 +2,7 @@ import Head from "next/head";
 import Select from "react-select";
 import { Button } from "@chakra-ui/react";
 import { setupAPIClient } from "../../services/api";
+import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
@@ -46,17 +47,15 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
           />
         </div>
         <Select
-          id="localizacao-atual"
+          instanceId="localizacao-atual"
           options={options}
-          value={currentLocation}
-          onChange={(e) => setCurrentLocation(e.target.value)}
+          defaultValue={currentLocation}
           placeholder="Localização Atual"
           className={styles.select}
         />
         <Select
-          id="destino-desejado"
+          instanceId="destino-desejado"
           options={options}
-          onChange={(e) => setDesiredDestination(e.target.value)}
           placeholder="Destino Desejado"
           className={styles.select}
         />
