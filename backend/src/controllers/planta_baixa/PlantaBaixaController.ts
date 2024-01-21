@@ -5,7 +5,7 @@ import {
   GetBlocoPlantasBaixasService,
   GetPlantaBaixaByIdService,
   UpdatePlantaBaixaService,
-  DeletePlantaBaixaService
+  DeletePlantaBaixaService,
 } from "../../services/planta_baixa/PlantaBaixaService";
 
 class CreatePlantaBaixaController {
@@ -16,7 +16,7 @@ class CreatePlantaBaixaController {
     const andar = Number(andar_id);
 
     if (!req.file) {
-      return res.status(400).json({ message: 'Imagem não encontrada' });
+      return res.status(400).json({ message: "Imagem não encontrada" });
     } else {
       const planta_baixa = await createPlantaBaixaService.execute({
         descricao,
@@ -118,7 +118,13 @@ class GetPlantasBaixasImagensController {
   // mesmo bloco e andar diferente
   // bloco diferente
   async handle(req: Request, res: Response) {
-    
+    const localizacaoAtual = req.query.localizacaoAtual.toString();
+    const destinoDesejado = req.query.destinoDesejado.toString();
+
+    const [localizacaoId, localizacaoTipo] = localizacaoAtual.split("_");
+    const [destinoId, destinoTipo] = destinoDesejado.split("_");
+
+    console.log(localizacaoId, localizacaoTipo, destinoId, destinoTipo);
   }
 }
 
