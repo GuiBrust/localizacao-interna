@@ -7,17 +7,25 @@ import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
-  const salaOptions = plantas_baixas.flatMap((planta_baixa) =>
+  let salaOptions = plantas_baixas.flatMap((planta_baixa) =>
     planta_baixa.salas.map((sala) => ({
       value: `${sala.id}_salas`,
       label: `${planta_baixa.andar.bloco.descricao} - ${sala.descricao}`,
     }))
   );
 
-  const blocoOptions = JSON.parse(blocos.marcacoesBloco).map((bloco) => ({
-    value: `${bloco.bloco_id}_campus`,
+  salaOptions = salaOptions.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
+
+  let blocoOptions = JSON.parse(blocos.marcacoesBloco).map((bloco) => ({
+    value: `${bloco.bloco_id}_bloco`,
     label: bloco.descricao_bloco,
   }));
+
+  blocoOptions = blocoOptions.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
 
   const options = [
     {
@@ -41,6 +49,12 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   const [destinoDesejado, setDestinoDesejado] = useState(null);
 
   const handleSubmit = async () => {
+
+    if (!localizacaoAtual || !destinoDesejado) {
+      toast.error("Selecione a localização atual e o destino desejado!");
+      return;
+    }
+
     const apiClient = setupAPIClient();
 
     try {
@@ -51,6 +65,8 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
         },
       });
 
+      // deverá ser utilizado para verificar o tamanho do retorno
+      // Object.keys(response.data).length
       console.log(response.data);
     } catch (error) {
       toast.error("Erro ao buscar sala!");
@@ -100,8 +116,8 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
 }
 
 export const getServerSideProps = async (ctx) => {
-  const salaId = ctx.query.sala_id as string;
-  const tipo = ctx.query.tipo as string;
+  const salaId = ctx.query.sala_id as string || null;
+  const tipo = ctx.query.tipo as string || null;
 
   const apiClient = setupAPIClient(ctx);
 

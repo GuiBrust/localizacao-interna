@@ -6,6 +6,7 @@ import {
   GetPlantaBaixaByIdService,
   UpdatePlantaBaixaService,
   DeletePlantaBaixaService,
+  GetPlantasBaixasImagensService,
 } from "../../services/planta_baixa/PlantaBaixaService";
 
 class CreatePlantaBaixaController {
@@ -111,12 +112,6 @@ class DeletePlantaBaixaController {
 }
 
 class GetPlantasBaixasImagensController {
-  // TODO vai receber id de localizacao atual e da localização desejada
-  // verifica se
-  // atual x destino
-  // mesmo bloco e mesmo andar
-  // mesmo bloco e andar diferente
-  // bloco diferente
   async handle(req: Request, res: Response) {
     const localizacaoAtual = req.query.localizacaoAtual.toString();
     const destinoDesejado = req.query.destinoDesejado.toString();
@@ -124,7 +119,16 @@ class GetPlantasBaixasImagensController {
     const [localizacaoId, localizacaoTipo] = localizacaoAtual.split("_");
     const [destinoId, destinoTipo] = destinoDesejado.split("_");
 
-    console.log(localizacaoId, localizacaoTipo, destinoId, destinoTipo);
+    const getPlantasBaixasImagensService = new GetPlantasBaixasImagensService();
+
+    const plantas_baixas = await getPlantasBaixasImagensService.execute(
+      Number(localizacaoId),
+      localizacaoTipo,
+      Number(destinoId),
+      destinoTipo
+    );
+
+    return res.json(plantas_baixas);
   }
 }
 
