@@ -139,22 +139,30 @@ class GetPlantasBaixasImagensService {
 
       origem = { ...origem.planta_baixa, marcacoes };
 
-      console.log('retorno 1');
       return { origem };
     } else if (retorna_duas_imagens) {
-      origem = { ...origem.planta_baixa, marcacoes: [{
-        top: origem.coordenada_x,
-        left: origem.coordenada_y,
-        descricao: origem.descricao,
-      }] };
+      origem = {
+        ...origem.planta_baixa,
+        marcacoes: [
+          {
+            top: origem.coordenada_x,
+            left: origem.coordenada_y,
+            descricao: origem.descricao,
+          },
+        ],
+      };
 
-      destino = { ...destino.planta_baixa, marcacoes: [{
-        top: destino.coordenada_x,
-        left: destino.coordenada_y,
-        descricao: destino.descricao,
-      }] };
-      
-      console.log('retorno 2');
+      destino = {
+        ...destino.planta_baixa,
+        marcacoes: [
+          {
+            top: destino.coordenada_x,
+            left: destino.coordenada_y,
+            descricao: destino.descricao,
+          },
+        ],
+      };
+
       return { origem, destino };
     } else if (localizacaoTipo != destinoTipo) {
       if (localizacaoTipo === "bloco") {
@@ -165,7 +173,6 @@ class GetPlantasBaixasImagensService {
         );
         origem = { ...origem, marcacoes };
 
-        console.log('retorno 3')
         return { origem };
       } else {
         blocos_ids = [origem.planta_baixa.andar.bloco_id, destinoId];
@@ -175,7 +182,6 @@ class GetPlantasBaixasImagensService {
         );
         destino = { ...destino, marcacoes };
 
-        console.log('retorno 4');
         return { destino };
       }
     } else if (
@@ -193,7 +199,6 @@ class GetPlantasBaixasImagensService {
       );
       origem = { ...origem, marcacoes };
 
-      console.log('retorno 5');
       return { origem };
     }
   }
