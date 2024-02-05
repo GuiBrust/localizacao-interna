@@ -126,13 +126,13 @@ class GetPlantasBaixasImagensService {
     if (origem?.planta_baixa_id === destino?.planta_baixa_id) {
       marcacoes = [
         {
-          top: origem.coordenada_x,
-          left: origem.coordenada_y,
+          top: origem.coordenada_y,
+          left: origem.coordenada_x,
           descricao: origem.descricao,
         },
         {
-          top: destino.coordenada_x,
-          left: destino.coordenada_y,
+          top: destino.coordenada_y,
+          left: destino.coordenada_x,
           descricao: destino.descricao,
         },
       ];
@@ -145,8 +145,8 @@ class GetPlantasBaixasImagensService {
         ...origem.planta_baixa,
         marcacoes: [
           {
-            top: origem.coordenada_x,
-            left: origem.coordenada_y,
+            top: origem.coordenada_y,
+            left: origem.coordenada_x,
             descricao: origem.descricao,
           },
         ],
@@ -156,8 +156,8 @@ class GetPlantasBaixasImagensService {
         ...destino.planta_baixa,
         marcacoes: [
           {
-            top: destino.coordenada_x,
-            left: destino.coordenada_y,
+            top: destino.coordenada_y,
+            left: destino.coordenada_x,
             descricao: destino.descricao,
           },
         ],
@@ -168,8 +168,10 @@ class GetPlantasBaixasImagensService {
       if (localizacaoTipo === "bloco") {
         blocos_ids = [localizacaoId, destino.planta_baixa.andar.bloco_id];
 
-        marcacoes = JSON.parse(origem.marcacoesBloco).filter((marcacao) =>
-          blocos_ids.includes(parseInt(marcacao.bloco_id))
+        marcacoes = blocos_ids.map((id) =>
+          JSON.parse(destino.marcacoesBloco).find(
+            (marcacao) => parseInt(marcacao.bloco_id) === id
+          )
         );
         origem = { ...origem, marcacoes };
 
@@ -177,8 +179,10 @@ class GetPlantasBaixasImagensService {
       } else {
         blocos_ids = [origem.planta_baixa.andar.bloco_id, destinoId];
 
-        marcacoes = JSON.parse(destino.marcacoesBloco).filter((marcacao) =>
-          blocos_ids.includes(parseInt(marcacao.bloco_id))
+        marcacoes = blocos_ids.map((id) =>
+          JSON.parse(destino.marcacoesBloco).find(
+            (marcacao) => parseInt(marcacao.bloco_id) === id
+          )
         );
         destino = { ...destino, marcacoes };
 
@@ -194,8 +198,10 @@ class GetPlantasBaixasImagensService {
 
       origem = await buscarBloco();
 
-      marcacoes = JSON.parse(origem.marcacoesBloco).filter((marcacao) =>
-        blocos_ids.includes(parseInt(marcacao.bloco_id))
+      marcacoes = blocos_ids.map((id) =>
+        JSON.parse(destino.marcacoesBloco).find(
+          (marcacao) => parseInt(marcacao.bloco_id) === id
+        )
       );
       origem = { ...origem, marcacoes };
 

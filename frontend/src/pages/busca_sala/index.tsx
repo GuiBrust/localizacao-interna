@@ -5,6 +5,7 @@ import { setupAPIClient } from "../../services/api";
 import { useState } from "react";
 import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
+import ImageMarker, { Marker } from "react-image-marker";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   let salaOptions = plantas_baixas.flatMap((planta_baixa) =>
@@ -38,6 +39,8 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
 
   const [localizacaoAtual, setLocalizacaoAtual] = useState(currentLocation?.value || null);
   const [destinoDesejado, setDestinoDesejado] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [markers, setMarkers] = useState<Marker[]>([]);
 
   const handleSubmit = async () => {
     if (!localizacaoAtual || !destinoDesejado) {
@@ -57,9 +60,13 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
 
       // deverá ser utilizado para verificar o tamanho do retorno
       // Object.keys(response.data).length
-      console.log(response.data);
+
+      let planta_baixa = response.data["destino"] || response.data["origem"];
+      setImageUrl("http://localhost:3333/files/" + planta_baixa.imagem);
+      setMarkers(planta_baixa.marcacoes);
     } catch (error) {
       toast.error("Erro ao buscar sala!");
+      console.log(error);
     }
   };
 
@@ -68,7 +75,9 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
       <Head>
         <title>Busca Sala</title>
       </Head>
-      <Box className={styles.containerImagem}>{/* O conteúdo existente vem aqui dentro do Box */}</Box>
+      <Box className={styles.containerImagem}>
+        {imageUrl && <ImageMarker src={imageUrl} markers={markers} width={250} height={250} />}
+      </Box>
 
       <Box className={styles.containerFiltros}>
         <Select
