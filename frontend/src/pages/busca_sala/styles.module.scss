@@ -4,6 +4,10 @@
   margin: 16px;
   border-radius: 8px;
   height: 72vh;
+  display: flex;
+  overflow-x: auto;
+  align-items: center;
+  justify-content: center;
 }
 
 .containerFiltros {

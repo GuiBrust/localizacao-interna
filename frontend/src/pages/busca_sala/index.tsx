@@ -6,6 +6,8 @@ import { useState } from "react";
 import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
 import ImageMarker, { Marker } from "react-image-marker";
+import { TransformWrapper, TransformComponent, KeepScale } from "react-zoom-pan-pinch";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   let salaOptions = plantas_baixas.flatMap((planta_baixa) =>
@@ -76,7 +78,29 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
         <title>Busca Sala</title>
       </Head>
       <Box className={styles.containerImagem}>
-        {imageUrl && <ImageMarker src={imageUrl} markers={markers} width={250} height={250} />}
+        {imageUrl && (
+          <TransformWrapper>
+            <TransformComponent>
+              <img src={imageUrl} alt="" />
+              {markers.map((marker, index) => (
+                <div
+                  key={index}
+                  style={{
+                    position: "absolute",
+                    top: `${marker.top}%`,
+                    left: `${marker.left}%`,
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 2,
+                  }}
+                >
+                  <KeepScale>
+                    <FaMapMarkerAlt fill="red" style={{ width: "20px", height: "20px" }} />
+                  </KeepScale>
+                </div>
+              ))}
+            </TransformComponent>
+          </TransformWrapper>
+        )}
       </Box>
 
       <Box className={styles.containerFiltros}>
