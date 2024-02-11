@@ -17,6 +17,10 @@
   flex-direction: column;
   padding: 2rem 1.5rem;
 
+  input {
+    margin-bottom: 1rem;
+  }
+
   h1{
     color: var(--white);
     padding-bottom: 1rem;

@@ -1,44 +1,47 @@
-import { useContext, FormEvent, useState } from 'react'
-import Head from 'next/head'
-import styles from '../../styles/home.module.scss'
-import Image from 'next/image'
+import { useContext, FormEvent, useState } from "react";
+import Head from "next/head";
+import styles from "../../styles/home.module.scss";
+import Image from "next/image";
 
-import logoImg from '../../public/header.png'
+import logoImg from "../../public/header.png";
 
-import { Input } from '../components/ui/Input'
-import { Button } from '../components/ui/Button'
+import { AuthContext } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
 
-import { AuthContext } from '../contexts/AuthContext'
-import { toast } from 'react-toastify'
+import { canSSRGuest } from "../utils/canSSRGuest";
 
-import { canSSRGuest } from '../utils/canSSRGuest'
+import { Input, FormControl, FormLabel, InputGroup, InputRightElement, Button } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 export default function Home() {
-  const { signIn } = useContext(AuthContext)
+  const { signIn } = useContext(AuthContext);
 
-  const [user, setUser] = useState('')
-  const [senha, setSenha] = useState('')
+  const [user, setUser] = useState("");
+  const [senha, setSenha] = useState("");
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
 
-    if (user === '' || senha === '') {
-      toast.warning('Preencha todos os campos!');
+    if (user === "" || senha === "") {
+      toast.warning("Preencha todos os campos!");
       return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     let data = {
       user,
-      senha
-    }
+      senha,
+    };
 
-    await signIn(data)
+    await signIn(data);
 
-    setLoading(false)
+    setLoading(false);
   }
 
   return (
@@ -51,35 +54,41 @@ export default function Home() {
 
         <div className={styles.login}>
           <form onSubmit={handleLogin}>
-            <Input
-              placeholder='Usuário'
-              type='text'
-              value={user}
-              onChange={event => setUser(event.target.value)}
-            />
+            <FormControl variant="floating">
+              <Input placeholder=" " type="text" value={user} onChange={(event) => setUser(event.target.value)} />
+              <FormLabel>Usuário</FormLabel>
+            </FormControl>
 
-            <Input
-              placeholder='Senha'
-              type='password'
-              value={senha}
-              onChange={event => setSenha(event.target.value)}
-            />
+            <FormControl variant="floating">
+              <InputGroup>
+                <Input
+                  pr="4.5rem"
+                  type={show ? "text" : "password"}
+                  placeholder=" "
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                />
+                <FormLabel>Senha</FormLabel>
+                <InputRightElement width="4.5rem">
+                  <Button size="sm" onClick={handleClick} variant="ghost" _hover={{ bg: "transparent" }}>
+                    {show ? <ViewOffIcon /> : <ViewIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
 
-            <Button
-              type='submit'
-              Loading={loading}
-            >
+            <Button type="submit" Loading={loading} colorScheme="blue">
               Entrar
             </Button>
           </form>
         </div>
       </div>
     </>
-  )
+  );
 }
 
 export const getServerSideProps = canSSRGuest(async (ctx) => {
   return {
-    props: {}
-  }
-})
+    props: {},
+  };
+});
