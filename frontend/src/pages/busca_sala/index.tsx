@@ -1,13 +1,12 @@
 import Head from "next/head";
-import Select from "react-select";
 import { Box, Button } from "@chakra-ui/react";
 import { setupAPIClient } from "../../services/api";
 import { useState } from "react";
 import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
-import ImageMarker, { Marker } from "react-image-marker";
 import { TransformWrapper, TransformComponent, KeepScale } from "react-zoom-pan-pinch";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import SelectFloatingLabel from "../../components/SelectFloatingLabel";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   let salaOptions = plantas_baixas.flatMap((planta_baixa) =>
@@ -79,7 +78,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
       </Head>
       <Box className={styles.containerImagem}>
         {imageUrl && (
-          <TransformWrapper>
+          <TransformWrapper className={styles.imagem}>
             <TransformComponent>
               <img src={imageUrl} alt="" />
               {markers.map((marker, index) => (
@@ -104,7 +103,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
       </Box>
 
       <Box className={styles.containerFiltros}>
-        <Select
+        <SelectFloatingLabel
           instanceId="localizacao-atual"
           options={options}
           defaultValue={currentLocation}
@@ -113,7 +112,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
             setLocalizacaoAtual(option.value);
           }}
         />
-        <Select
+        <SelectFloatingLabel
           instanceId="destino-desejado"
           options={options}
           placeholder="Destino Desejado"

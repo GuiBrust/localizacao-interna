@@ -8,6 +8,10 @@
   overflow-x: auto;
   align-items: center;
   justify-content: center;
+
+  & > * {
+    overflow: visible !important;
+  }
 }
 
 .containerFiltros {
