@@ -124,20 +124,30 @@ class GetPlantasBaixasImagensService {
         destino.planta_baixa.andar.bloco_id;
 
     if (origem?.planta_baixa_id === destino?.planta_baixa_id) {
-      marcacoes = [
-        {
-          top: origem.coordenada_y,
-          left: origem.coordenada_x,
-          descricao: origem.descricao,
-        },
-        {
-          top: destino.coordenada_y,
-          left: destino.coordenada_x,
-          descricao: destino.descricao,
-        },
-      ];
+      if (localizacaoTipo === "salas") {
+        marcacoes = [
+          {
+            top: origem.coordenada_y,
+            left: origem.coordenada_x,
+            descricao: origem.descricao,
+          },
+          {
+            top: destino.coordenada_y,
+            left: destino.coordenada_x,
+            descricao: destino.descricao,
+          },
+        ];
+        origem = { ...origem.planta_baixa, marcacoes };
+      } else {
+        blocos_ids = [localizacaoId, destinoId];
 
-      origem = { ...origem.planta_baixa, marcacoes };
+        marcacoes = blocos_ids.map((id) =>
+          JSON.parse(origem.marcacoesBloco).find(
+            (marcacao) => parseInt(marcacao.bloco_id) === id
+          )
+        );
+        origem = { ...origem, marcacoes };
+      }
 
       return { origem };
     } else if (retorna_duas_imagens) {
@@ -199,7 +209,7 @@ class GetPlantasBaixasImagensService {
       origem = await buscarBloco();
 
       marcacoes = blocos_ids.map((id) =>
-        JSON.parse(destino.marcacoesBloco).find(
+        JSON.parse(origem.marcacoesBloco).find(
           (marcacao) => parseInt(marcacao.bloco_id) === id
         )
       );
