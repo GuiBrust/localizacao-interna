@@ -4,9 +4,9 @@ import { setupAPIClient } from "../../services/api";
 import { useState } from "react";
 import styles from "./styles.module.scss";
 import { toast } from "react-toastify";
-import { TransformWrapper, TransformComponent, KeepScale } from "react-zoom-pan-pinch";
-import { FaMapMarkerAlt } from "react-icons/fa";
 import SelectFloatingLabel from "../../components/SelectFloatingLabel";
+import BoxImagem from "../../components/BoxImagem";
+import BoxDuasImagens from "../../components/BoxDuasImagens";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   let salaOptions = plantas_baixas.flatMap((planta_baixa) =>
@@ -43,6 +43,9 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   const [imageUrl, setImageUrl] = useState(null);
   const [markers, setMarkers] = useState<Marker[]>([]);
 
+  const [imageUrl2, setImageUrl2] = useState(null);
+  const [markers2, setMarkers2] = useState<Marker[]>([]);
+
   const handleSubmit = async () => {
     if (!localizacaoAtual || !destinoDesejado) {
       toast.error("Selecione a localização atual e o destino desejado!");
@@ -59,12 +62,18 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
         },
       });
 
-      // deverá ser utilizado para verificar o tamanho do retorno
-      // Object.keys(response.data).length
-
-      let planta_baixa = response.data["destino"] || response.data["origem"];
-      setImageUrl("http://localhost:3333/files/" + planta_baixa.imagem);
-      setMarkers(planta_baixa.marcacoes);
+      if (Object.keys(response.data).length === 1) {
+        let planta_baixa = response.data["destino"] || response.data["origem"];
+        setImageUrl("http://localhost:3333/files/" + planta_baixa.imagem);
+        setMarkers(planta_baixa.marcacoes);
+        setImageUrl2(null);
+        setMarkers2([]);
+      } else if (Object.keys(response.data).length === 2) {
+        setImageUrl("http://localhost:3333/files/" + response.data["origem"].imagem);
+        setMarkers(response.data["origem"].marcacoes);
+        setImageUrl2("http://localhost:3333/files/" + response.data["destino"].imagem);
+        setMarkers2(response.data["destino"].marcacoes);
+      }
     } catch (error) {
       toast.error("Erro ao buscar sala!");
       console.log(error);
@@ -77,28 +86,10 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
         <title>Busca Sala</title>
       </Head>
       <Box className={styles.containerImagem}>
-        {imageUrl && (
-          <TransformWrapper className={styles.imagem}>
-            <TransformComponent>
-              <img src={imageUrl} alt="" />
-              {markers.map((marker, index) => (
-                <div
-                  key={index}
-                  style={{
-                    position: "absolute",
-                    top: `${marker.top}%`,
-                    left: `${marker.left}%`,
-                    transform: "translate(-50%, -50%)",
-                    zIndex: 2,
-                  }}
-                >
-                  <KeepScale>
-                    <FaMapMarkerAlt fill="red" style={{ width: "20px", height: "20px" }} />
-                  </KeepScale>
-                </div>
-              ))}
-            </TransformComponent>
-          </TransformWrapper>
+        {imageUrl2 ? (
+          <BoxDuasImagens imageUrl={imageUrl} markers={markers} imageUrl2={imageUrl2} markers2={markers2} />
+        ) : (
+          <BoxImagem imageUrl={imageUrl} markers={markers} />
         )}
       </Box>
 
@@ -134,13 +125,10 @@ export const getServerSideProps = async (ctx) => {
 
   const apiClient = setupAPIClient(ctx);
 
-  const plantas_baixas = await apiClient.get("/plantas_baixas").then((response) => {
-    return response.data;
-  });
-
-  const blocos = await apiClient.get("/plantas_baixas_bloco").then((response) => {
-    return response.data;
-  });
+  const [plantas_baixas, blocos] = await Promise.all([
+    apiClient.get("/plantas_baixas").then((response) => response.data),
+    apiClient.get("/plantas_baixas_bloco").then((response) => response.data),
+  ]);
 
   return {
     props: {

@@ -1,0 +1,11 @@
+.boxInterna {
+  border: 1px solid gray;
+
+  height: 50%;
+  display: flex;
+  overflow-x: auto;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+}

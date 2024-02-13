@@ -100,6 +100,14 @@ async function buscaOrigemDestino(
   return { origem, destino };
 }
 
+async function getMarcacoesPorBlocosIds(blocos_ids: number[], marcacoesBloco: string) {
+  return blocos_ids.map((id) =>
+    JSON.parse(marcacoesBloco).find(
+      (marcacao) => parseInt(marcacao.bloco_id) === id
+    )
+  );
+}
+
 class GetPlantasBaixasImagensService {
   async execute(
     localizacaoId: number,
@@ -141,11 +149,7 @@ class GetPlantasBaixasImagensService {
       } else {
         blocos_ids = [localizacaoId, destinoId];
 
-        marcacoes = blocos_ids.map((id) =>
-          JSON.parse(origem.marcacoesBloco).find(
-            (marcacao) => parseInt(marcacao.bloco_id) === id
-          )
-        );
+        marcacoes = await getMarcacoesPorBlocosIds(blocos_ids, origem.marcacoesBloco);
         origem = { ...origem, marcacoes };
       }
 
@@ -178,22 +182,14 @@ class GetPlantasBaixasImagensService {
       if (localizacaoTipo === "bloco") {
         blocos_ids = [localizacaoId, destino.planta_baixa.andar.bloco_id];
 
-        marcacoes = blocos_ids.map((id) =>
-          JSON.parse(destino.marcacoesBloco).find(
-            (marcacao) => parseInt(marcacao.bloco_id) === id
-          )
-        );
+        marcacoes = await getMarcacoesPorBlocosIds(blocos_ids, destino.marcacoesBloco);
         origem = { ...origem, marcacoes };
 
         return { origem };
       } else {
         blocos_ids = [origem.planta_baixa.andar.bloco_id, destinoId];
 
-        marcacoes = blocos_ids.map((id) =>
-          JSON.parse(destino.marcacoesBloco).find(
-            (marcacao) => parseInt(marcacao.bloco_id) === id
-          )
-        );
+        marcacoes = await getMarcacoesPorBlocosIds(blocos_ids, origem.marcacoesBloco);
         destino = { ...destino, marcacoes };
 
         return { destino };
@@ -208,11 +204,7 @@ class GetPlantasBaixasImagensService {
 
       origem = await buscarBloco();
 
-      marcacoes = blocos_ids.map((id) =>
-        JSON.parse(origem.marcacoesBloco).find(
-          (marcacao) => parseInt(marcacao.bloco_id) === id
-        )
-      );
+      marcacoes = await getMarcacoesPorBlocosIds(blocos_ids, origem.marcacoesBloco);
       origem = { ...origem, marcacoes };
 
       return { origem };

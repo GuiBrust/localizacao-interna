@@ -310,11 +310,11 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
   const apiClient = setupAPIClient(ctx);
-  let response = await apiClient.get("/plantas_baixas_bloco");
-  const planta_baixa = response.data;
 
-  response = await apiClient.get("/blocos");
-  const blocos = response.data;
+  const [planta_baixa, blocos] = await Promise.all([
+    apiClient.get("/plantas_baixas_bloco").then((response) => response.data),
+    apiClient.get("/blocos").then((response) => response.data),
+  ]);
 
   return {
     props: {

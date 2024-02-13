@@ -8,6 +8,7 @@
   overflow-x: auto;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 
   & > * {
     overflow: visible !important;
