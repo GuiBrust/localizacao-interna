@@ -76,7 +76,6 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
       }
     } catch (error) {
       toast.error("Erro ao buscar sala!");
-      console.log(error);
     }
   };
 
