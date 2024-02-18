@@ -124,7 +124,7 @@ async function validaFormulario(
 export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
   const link_imagem =
     planta_baixa && planta_baixa.imagem
-      ? "http://localhost:3333/files/" + planta_baixa.imagem
+      ? process.env.NEXT_PUBLIC_API_URL + "files/" + planta_baixa.imagem
       : "";
   const [imageUrl, setImageUrl] = useState(link_imagem);
   const [imageProd, setImage] = useState(null);

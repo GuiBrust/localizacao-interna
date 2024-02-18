@@ -53,6 +53,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     }
 
     const apiClient = setupAPIClient();
+    const endereco = process.env.NEXT_PUBLIC_API_URL + 'files/'
 
     try {
       const response = await apiClient.get("/plantas_baixas_busca_imagens", {
@@ -64,14 +65,14 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
 
       if (Object.keys(response.data).length === 1) {
         let planta_baixa = response.data["destino"] || response.data["origem"];
-        setImageUrl("http://localhost:3333/files/" + planta_baixa.imagem);
+        setImageUrl(endereco + planta_baixa.imagem);
         setMarkers(planta_baixa.marcacoes);
         setImageUrl2(null);
         setMarkers2([]);
       } else if (Object.keys(response.data).length === 2) {
-        setImageUrl("http://localhost:3333/files/" + response.data["origem"].imagem);
+        setImageUrl(endereco + response.data["origem"].imagem);
         setMarkers(response.data["origem"].marcacoes);
-        setImageUrl2("http://localhost:3333/files/" + response.data["destino"].imagem);
+        setImageUrl2(endereco + response.data["destino"].imagem);
         setMarkers2(response.data["destino"].marcacoes);
       }
     } catch (error) {

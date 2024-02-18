@@ -83,7 +83,7 @@ export default function ModalPlantaBaixa({
   const [opcoes_andares, setOpcoesAndares] = useState([]);
 
   const link_imagem = dataEdit.imagem
-    ? "http://localhost:3333/files/" + dataEdit.imagem
+    ? process.env.NEXT_PUBLIC_API_URL + "files/" + dataEdit.imagem
     : "";
   const [imageUrl, setImageUrl] = useState(link_imagem);
   const [imageProd, setImage] = useState(null);
