@@ -77,7 +77,7 @@ export default function Home() {
               </InputGroup>
             </FormControl>
 
-            <Button type="submit" Loading={loading} colorScheme="blue">
+            <Button isLoading={loading} loadingText="Entrando..." type="submit" colorScheme="blue">
               Entrar
             </Button>
           </form>
