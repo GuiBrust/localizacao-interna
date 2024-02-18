@@ -31,7 +31,7 @@ services:
     stdin_open: true
     container_name: frontend
     tty: true
-    command: "yarn dev"
+    command: "yarn start"
     volumes:
       - "./frontend:/app"
     ports:

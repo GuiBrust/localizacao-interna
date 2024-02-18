@@ -22,3 +22,22 @@ export async function fetchSvgContent(url: string) {
 
   return svgOnly;
 }
+
+export async function imageToDataUri(imagePath) {
+  return new Promise((resolve, reject) => {
+    fetch(imagePath)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          const dataUri = reader.result;
+          resolve(dataUri);
+        };
+      })
+      .catch((error) => {
+        console.error("Error fetching image:", error);
+        reject(error);
+      });
+  });
+}

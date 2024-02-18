@@ -41,10 +41,10 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   const [localizacaoAtual, setLocalizacaoAtual] = useState(currentLocation?.value || null);
   const [destinoDesejado, setDestinoDesejado] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [markers, setMarkers] = useState([]);
 
   const [imageUrl2, setImageUrl2] = useState(null);
-  const [markers2, setMarkers2] = useState<Marker[]>([]);
+  const [markers2, setMarkers2] = useState([]);
 
   const handleSubmit = async () => {
     if (!localizacaoAtual || !destinoDesejado) {

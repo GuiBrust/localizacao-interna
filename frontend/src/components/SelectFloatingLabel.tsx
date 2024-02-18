@@ -3,16 +3,22 @@ import Select, { components } from 'react-select';
 
 const { ValueContainer, Placeholder } = components;
 
-const CustomValueContainer = ({ children, ...props }) => (
-  <ValueContainer {...props}>
-    <Placeholder {...props} isFocused={props.isFocused}>
-      {props.selectProps.placeholder}
-    </Placeholder>
-    {React.Children.map(children, (child) =>
-      child && child.type !== Placeholder ? child : null
-    )}
-  </ValueContainer>
-);
+const CustomValueContainer = (props) => {
+  // Destructure props to extract what's needed for the Placeholder
+  const { children, isFocused, selectProps } = props;
+  const { placeholder } = selectProps;
+
+  return (
+    <ValueContainer {...props}>
+      <Placeholder isFocused={isFocused} {...props}>
+        {placeholder}
+      </Placeholder>
+      {React.Children.map(children, (child) =>
+        child && child.type !== Placeholder ? child : null
+      )}
+    </ValueContainer>
+  );
+};
 
 const SelectFloatingLabel = (props) => (
   <Select

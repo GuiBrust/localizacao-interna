@@ -21,7 +21,7 @@ import ImageMarker, { Marker } from "react-image-marker";
 import { useEffect, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { toast } from "react-toastify";
-
+import React, { ChangeEvent } from 'react';
 import styles from "./styles.module.scss";
 
 type BlocoProps = {
@@ -33,11 +33,18 @@ type PlantaBaixaProps = {
   id: number;
   descricao: string;
   marcacoesBloco: string;
+  imagem?: string;
 };
 
 interface DashboardProps {
-  planta_baixa: PlantaBaixaProps[];
+  planta_baixa: PlantaBaixaProps;
   blocos: BlocoProps[];
+}
+
+interface CustomMarker extends Marker {
+  bloco_id?: string;
+  descricao_bloco?: string;
+  id?: any
 }
 
 async function handlePutPlantaBaixa(id: string, file: File, markers: Marker[]) {
@@ -60,7 +67,7 @@ async function handlePutPlantaBaixa(id: string, file: File, markers: Marker[]) {
 
 async function validaFormulario(
   file: File,
-  markers: Marker[],
+  markers: CustomMarker[],
   isUpdate: boolean
 ) {
   let valido = true;
@@ -122,7 +129,7 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
   const [imageUrl, setImageUrl] = useState(link_imagem);
   const [imageProd, setImage] = useState(null);
   const [opcoes_blocos, setOpcoesBlocos] = useState([]);
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [markers, setMarkers] = useState<CustomMarker[]>([]);
   const [planta_baixa_id, setPlantaBaixaId] = useState(
     planta_baixa?.id ?? null
   );
@@ -201,14 +208,11 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
               </span>
               {imageUrl && (
                 <ImageMarker
-                  className={styles.previewImage}
                   src={imageUrl}
                   markers={markers}
                   onAddMarker={(marker: Marker) => {
                     setMarkers([...markers, marker]);
                   }}
-                  width={250}
-                  height={250}
                 />
               )}
             </label>
@@ -240,9 +244,13 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
                           value={marker.bloco_id}
                           onChange={(e) => {
                             const updatedMarkers = [...markers];
+                            const selectedIndex = e.target.selectedIndex;
+                            const selectElement = e.target as HTMLSelectElement;
+                            const selectedOption = selectElement.options[selectedIndex] as HTMLOptionElement;
+                          
                             updatedMarkers[index].bloco_id = e.target.value;
-                            updatedMarkers[index].descricao_bloco =
-                              e.target[e.target.selectedIndex].text;
+                            updatedMarkers[index].descricao_bloco = selectedOption.text;
+                          
                             setMarkers(updatedMarkers);
                           }}
                         >
@@ -289,11 +297,7 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
                 }
 
                 if (planta_baixa_id) {
-                  await handlePutPlantaBaixa(
-                    planta_baixa_id,
-                    imageProd,
-                    markers
-                  );
+                  await handlePutPlantaBaixa(planta_baixa_id.toString(), imageProd, markers);
                 } else {
                   await handlePostPlantaBaixa(imageProd, markers);
                 }

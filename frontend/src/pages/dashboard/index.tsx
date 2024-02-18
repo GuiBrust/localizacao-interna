@@ -3,9 +3,8 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
 import { Header } from "../../components/Header";
 import { useEffect, useState } from "react";
-
 import React from "react";
-import { DataGrid, GridRowsProp, GridColDef, ptBR } from "@mui/x-data-grid";
+import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import {
   Tabs,
   TabList,
@@ -43,6 +42,10 @@ interface Sala {
   planta_baixa: PlantaBaixa;
 }
 
+type Salas = {
+  salas: Sala[];
+};
+
 const renderGerarQrCode = (params: any) => {
   if (params.tipo == "salas") {
     var nome = `Bloco: ${params.col6}, Andar: ${params.col5}, Sala: ${params.col2}`;
@@ -65,7 +68,7 @@ const renderGerarQrCode = (params: any) => {
   );
 };
 
-export default function Dashboard({ salas }: Sala) {
+export default function Dashboard({ salas }: Salas) {
   const [campusData, setCampusData] = useState([]);
 
   const columns: GridColDef[] = [
@@ -129,7 +132,7 @@ export default function Dashboard({ salas }: Sala) {
         }
       );
 
-      setCampusData(rowsCampus);
+      setCampusData([...rowsCampus]);
     } catch (error) {
       console.log(error);
     }
@@ -156,7 +159,6 @@ export default function Dashboard({ salas }: Sala) {
               autoHeight
               rows={rows}
               columns={columns}
-              localeText={ptBR.props.MuiDataGrid.localeText}
             />
           </TabPanel>
           <TabPanel>
@@ -165,7 +167,6 @@ export default function Dashboard({ salas }: Sala) {
                 autoHeight
                 rows={campusData}
                 columns={columnsCampus}
-                localeText={ptBR.props.MuiDataGrid.localeText}
               />
             )}
           </TabPanel>

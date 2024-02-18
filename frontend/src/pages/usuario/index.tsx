@@ -148,7 +148,6 @@ export default function Usuario({ users }: UsuarioProps) {
             data={userList}
             setData={setUserList}
             dataEdit={dataEdit}
-            setDataEdit={setDataEdit}
             setUserList={setUserList}
           />
         )}

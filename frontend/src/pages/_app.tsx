@@ -4,6 +4,8 @@ import { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { DataGrid, ptBR } from "@mui/x-data-grid";
 
 import { AuthProvider } from "../contexts/AuthContext";
 
@@ -43,12 +45,23 @@ export const theme = extendTheme({
   }
 });
 
+const themeMui = createTheme(
+  {
+    palette: {
+      primary: { main: '#1976d2' },
+    },
+  },
+  ptBR,
+);
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <ChakraProvider theme={theme}>
+      <ThemeProvider theme={themeMui}>
         <Component {...pageProps} />
         <ToastContainer limit={5} autoClose={3000} />
+        </ThemeProvider>;
       </ChakraProvider>
     </AuthProvider>
   );
