@@ -99,7 +99,7 @@ export default function Dashboard({ salas }: Salas) {
       sortable: false,
       filterable: false,
       renderCell: (params) => {
-        params.row.tipo = "campus";
+        params.row.tipo = "bloco";
         return renderGerarQrCode(params.row);
       },
     },
