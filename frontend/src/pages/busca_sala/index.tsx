@@ -18,10 +18,13 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
 
   salaOptions = salaOptions.sort((a, b) => a.label.localeCompare(b.label));
 
-  let blocoOptions = JSON.parse(blocos.marcacoesBloco).map((bloco) => ({
-    value: `${bloco.bloco_id}_bloco`,
-    label: bloco.descricao_bloco,
-  }));
+  let blocoOptions = [];
+  if (blocos?.marcacoesBloco) {
+    blocoOptions = JSON.parse(blocos.marcacoesBloco).map((bloco) => ({
+      value: `${bloco.bloco_id}_bloco`,
+      label: bloco.descricao_bloco,
+    }));
+  }
 
   blocoOptions = blocoOptions.sort((a, b) => a.label.localeCompare(b.label));
 
@@ -53,7 +56,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     }
 
     const apiClient = setupAPIClient();
-    const endereco = process.env.NEXT_PUBLIC_API_URL + 'files/'
+    const endereco = process.env.NEXT_PUBLIC_API_URL + "files/";
 
     try {
       const response = await apiClient.get("/plantas_baixas_busca_imagens", {
