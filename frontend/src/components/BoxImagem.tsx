@@ -1,7 +1,12 @@
 import { TransformWrapper, TransformComponent, KeepScale } from "react-zoom-pan-pinch";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkerAlt, FaMapPin } from "react-icons/fa";
 
 export default function BoxImagem({ imageUrl, markers }) {
+  const style_icon = {
+    width: "20px",
+    height: "20px",
+  };
+    
   return (
     imageUrl && (
       <TransformWrapper>
@@ -19,7 +24,11 @@ export default function BoxImagem({ imageUrl, markers }) {
               }}
             >
               <KeepScale>
-                <FaMapMarkerAlt fill="red" style={{ width: "20px", height: "20px" }} />
+                {index === 0 ? (
+                  <FaMapPin fill="blue" style={style_icon} />
+                ) : (
+                  <FaMapMarkerAlt fill="red" style={style_icon} />
+                )}
               </KeepScale>
             </div>
           ))}

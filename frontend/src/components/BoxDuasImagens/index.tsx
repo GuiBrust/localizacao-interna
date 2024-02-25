@@ -1,10 +1,15 @@
 import { TransformWrapper, TransformComponent, KeepScale } from "react-zoom-pan-pinch";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkerAlt, FaMapPin } from "react-icons/fa";
 import { Box } from "@chakra-ui/react";
 import styles from "./styles.module.scss";
 
 export default function BoxDuasImagens({ imageUrl, markers, imageUrl2, markers2 }) {
-  const renderMarkers = (imageSrc, markers) => (
+  const style_icon = {
+    width: "20px",
+    height: "20px",
+  };
+
+  const renderMarkers = (imageSrc, markers, origem) => (
     <>
       <img src={imageSrc} />
       {markers.map((marker, index) => (
@@ -19,7 +24,7 @@ export default function BoxDuasImagens({ imageUrl, markers, imageUrl2, markers2 
           }}
         >
           <KeepScale>
-            <FaMapMarkerAlt fill="red" style={{ width: "20px", height: "20px" }} />
+            {origem ? <FaMapPin fill="blue" style={style_icon} /> : <FaMapMarkerAlt fill="red" style={style_icon} />}
           </KeepScale>
         </div>
       ))}
@@ -32,7 +37,7 @@ export default function BoxDuasImagens({ imageUrl, markers, imageUrl2, markers2 
         <Box className={styles.boxInterna}>
           <span>Localização Atual</span>
           <TransformWrapper>
-            <TransformComponent>{renderMarkers(imageUrl, markers)}</TransformComponent>
+            <TransformComponent>{renderMarkers(imageUrl, markers, true)}</TransformComponent>
           </TransformWrapper>
         </Box>
       )}
@@ -41,7 +46,7 @@ export default function BoxDuasImagens({ imageUrl, markers, imageUrl2, markers2 
         <Box className={styles.boxInterna}>
           <span>Destino Desejado</span>
           <TransformWrapper>
-            <TransformComponent>{renderMarkers(imageUrl2, markers2)}</TransformComponent>
+            <TransformComponent>{renderMarkers(imageUrl2, markers2, false)}</TransformComponent>
           </TransformWrapper>
         </Box>
       )}

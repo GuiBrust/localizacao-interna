@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import SelectFloatingLabel from "../../components/SelectFloatingLabel";
 import BoxImagem from "../../components/BoxImagem";
 import BoxDuasImagens from "../../components/BoxDuasImagens";
+import { FaMapMarkerAlt, FaMapPin } from "react-icons/fa";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   let salaOptions = plantas_baixas.flatMap((planta_baixa) =>
@@ -101,7 +102,12 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
           instanceId="localizacao-atual"
           options={options}
           defaultValue={currentLocation}
-          placeholder="Localização Atual"
+          placeholder={
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <FaMapPin style={{ color: 'blue', marginRight: '5px' }} />
+              <span>Localização Atual</span>
+            </div>
+          }
           onChange={(option) => {
             setLocalizacaoAtual(option.value);
           }}
@@ -109,7 +115,12 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
         <SelectFloatingLabel
           instanceId="destino-desejado"
           options={options}
-          placeholder="Destino Desejado"
+          placeholder={
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <FaMapMarkerAlt style={{ color: 'red', marginRight: '5px' }} />
+              <span>Destino Desejado</span>
+            </div>
+          }
           onChange={(option) => {
             setDestinoDesejado(option.value);
           }}

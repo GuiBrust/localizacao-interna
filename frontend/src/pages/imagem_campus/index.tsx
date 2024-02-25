@@ -162,7 +162,7 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
       return;
     }
 
-    if (file.type === "image/jpeg" || file.type === "image/png") {
+    if (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/svg+xml") {
       setImage(file);
       setImageUrl(URL.createObjectURL(file));
     } else {
@@ -219,7 +219,7 @@ export default function Dashboard({ planta_baixa, blocos }: DashboardProps) {
             <input
               className={styles.inputImage}
               type="file"
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg, image/svg+xml"
               id="fileInput"
               onChange={handleFile}
             />
