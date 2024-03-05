@@ -23,17 +23,15 @@ import {
   Td,
 } from "@chakra-ui/react";
 
-type AndarProps = {
+interface AndarProps {
   id: number;
   descricao: string;
+  bloco: any;
   bloco_id: number;
-};
-
-interface AndarProps {
-  andares: AndarProps[];
+  andares?: AndarProps[];
 }
 
-export default function Andar({ data }: AndarProps) {
+export default function Andar({ data }: { data: AndarProps[] }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dataEdit, setDataEdit] = useState({});
   const [dataList, setDataList] = useState(data || []);

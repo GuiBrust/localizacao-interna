@@ -27,13 +27,15 @@ type PlantaBaixaProps = {
   id: number;
   descricao: string;
   bloco_id: number;
+  andar?: any;
+  imagem?: string;
 };
 
-interface PlantaBaixaProps {
+interface PlantaBaixaPageProps {
   plantas_baixas: PlantaBaixaProps[];
 }
 
-export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaProps) {
+export default function PlantaBaixa({ plantas_baixas }: PlantaBaixaPageProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dataEdit, setDataEdit] = useState({});
   const [dataList, setDataList] = useState(plantas_baixas || []);

@@ -3,12 +3,13 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import logoImg from "../../public/unoesc-logo-header.svg";
-import { fetchSvgContent } from "../utils/pdfUtils";
+import { fetchSvgContent, imageToDataUri } from "../utils/pdfUtils";
 
 async function geraPDF(info) {
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
   const svgContent = await fetchSvgContent(logoImg.src);
+  const svgBase64 = await imageToDataUri(logoImg.src);
 
   const { nome, linkQrCode } = info;
   const data = format(new Date(), "dd/MM/yyyy");
@@ -51,7 +52,7 @@ async function geraPDF(info) {
     },
   };
 
-  pdfMake.createPdf(docDefinition).open();
+  pdfMake.createPdf(docDefinition as any).open();
 }
 
 export default geraPDF;

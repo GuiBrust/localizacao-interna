@@ -23,22 +23,20 @@ import {
   Td,
 } from "@chakra-ui/react";
 
-type BlocoProps = {
+interface BlocoProps {
   id: number;
   descricao: string;
-};
-
-interface BlocoProps {
   blocos: BlocoProps[];
+  data: BlocoProps;
 }
 
 export default function Bloco({ data }: BlocoProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dataEdit, setDataEdit] = useState({});
-  const [dataList, setDataList] = useState(data || []);
+  const [dataList, setDataList] = useState<BlocoProps[]>(Array.isArray(data) ? data : [data]);
 
   useEffect(() => {
-    setDataList(data);
+    setDataList(Array.isArray(data) ? data : [data]);
   }, [data]);
 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);

@@ -1,18 +1,16 @@
 .containerImagem {
   border: 1px solid gray;
-  padding: 16px;
+  padding: 1px;
   margin: 16px;
   border-radius: 8px;
-  height: 72vh;
+  height: 62vh;
   display: flex;
   overflow-x: auto;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
 
-  & > * {
-    overflow: visible !important;
-  }
+
 }
 
 .containerFiltros {

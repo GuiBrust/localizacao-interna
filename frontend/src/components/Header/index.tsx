@@ -24,6 +24,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 
 interface Props {
   children: React.ReactNode;
+  href: string;
 }
 
 const NavLink = (props: Props) => {

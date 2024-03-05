@@ -30,6 +30,11 @@ import styles from "./styles.module.scss";
 import { FcAddImage } from "react-icons/fc";
 import ImageMarker, { Marker } from "react-image-marker";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { ChangeEvent } from 'react';
+
+interface CustomMarker extends Marker {
+  description?: string;
+}
 
 async function apagaSalas(id_planta_baixa: number) {
   const apiClient = setupAPIClient();
@@ -41,7 +46,7 @@ async function apagaSalas(id_planta_baixa: number) {
   }
 }
 
-async function cadastraSalas(id_planta_baixa: number, markers: Marker[]) {
+async function cadastraSalas(id_planta_baixa: number, markers: CustomMarker[]) {
   const apiClient = setupAPIClient();
 
   try {
@@ -78,7 +83,7 @@ export default function ModalPlantaBaixa({
   const [opcoes_andares, setOpcoesAndares] = useState([]);
 
   const link_imagem = dataEdit.imagem
-    ? "http://localhost:3333/files/" + dataEdit.imagem
+    ? process.env.NEXT_PUBLIC_API_URL + "files/" + dataEdit.imagem
     : "";
   const [imageUrl, setImageUrl] = useState(link_imagem);
   const [imageProd, setImage] = useState(null);
@@ -155,7 +160,7 @@ export default function ModalPlantaBaixa({
     descricao: string,
     andar_id: number,
     file: File,
-    markers: Marker[]
+    markers: CustomMarker[]
   ) {
     let response;
     try {
@@ -189,7 +194,7 @@ export default function ModalPlantaBaixa({
     descricao: string,
     andar_id: number,
     file: File,
-    markers: Marker[]
+    markers: CustomMarker[]
   ) {
     try {
       const apiClient = setupAPIClient();
@@ -211,13 +216,13 @@ export default function ModalPlantaBaixa({
     }
 
     if (markers.length > 0) {
-      cadastraSalas(id, markers);
+      cadastraSalas(parseInt(id), markers);
     }else{
-      await apagaSalas(id);
+      await apagaSalas(parseInt(id));
     }
   }
 
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [markers, setMarkers] = useState<CustomMarker[]>([]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="full">
@@ -288,14 +293,11 @@ export default function ModalPlantaBaixa({
                 </span>
                 {imageUrl && (
                   <ImageMarker
-                    className={styles.previewImage}
                     src={imageUrl}
                     markers={markers}
                     onAddMarker={(marker: Marker) => {
                       setMarkers([...markers, marker]);
                     }}
-                    width={250}
-                    height={250}
                   />
                 )}
               </label>

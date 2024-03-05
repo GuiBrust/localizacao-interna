@@ -1,0 +1,47 @@
+services:
+  app:
+    build: .
+    tty: true
+    command: "yarn dev"
+    stdin_open: true
+    container_name: backend
+    image: backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3333:3333"
+    networks:
+      - networkapp
+  postgres:
+    container_name: postgres
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./volumepostgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - networkapp
+    restart: unless-stopped
+  frontend:
+    image: frontend
+    stdin_open: true
+    container_name: frontend
+    tty: true
+    command: "yarn start"
+    volumes:
+      - "./frontend:/app"
+    ports:
+      - "80:3000"
+    networks:
+      - networkapp
+
+networks:
+  networkapp:
+    name: app-network
+
+volumes:
+  volumepostgres:

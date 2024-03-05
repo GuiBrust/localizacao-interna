@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import SelectFloatingLabel from "../../components/SelectFloatingLabel";
 import BoxImagem from "../../components/BoxImagem";
 import BoxDuasImagens from "../../components/BoxDuasImagens";
+import { FaMapMarkerAlt, FaMapPin } from "react-icons/fa";
 
 export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   let salaOptions = plantas_baixas.flatMap((planta_baixa) =>
@@ -18,10 +19,13 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
 
   salaOptions = salaOptions.sort((a, b) => a.label.localeCompare(b.label));
 
-  let blocoOptions = JSON.parse(blocos.marcacoesBloco).map((bloco) => ({
-    value: `${bloco.bloco_id}_bloco`,
-    label: bloco.descricao_bloco,
-  }));
+  let blocoOptions = [];
+  if (blocos?.marcacoesBloco) {
+    blocoOptions = JSON.parse(blocos.marcacoesBloco).map((bloco) => ({
+      value: `${bloco.bloco_id}_bloco`,
+      label: bloco.descricao_bloco,
+    }));
+  }
 
   blocoOptions = blocoOptions.sort((a, b) => a.label.localeCompare(b.label));
 
@@ -41,10 +45,10 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   const [localizacaoAtual, setLocalizacaoAtual] = useState(currentLocation?.value || null);
   const [destinoDesejado, setDestinoDesejado] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [markers, setMarkers] = useState([]);
 
   const [imageUrl2, setImageUrl2] = useState(null);
-  const [markers2, setMarkers2] = useState<Marker[]>([]);
+  const [markers2, setMarkers2] = useState([]);
 
   const handleSubmit = async () => {
     if (!localizacaoAtual || !destinoDesejado) {
@@ -53,6 +57,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     }
 
     const apiClient = setupAPIClient();
+    const endereco = process.env.NEXT_PUBLIC_API_URL + "files/";
 
     try {
       const response = await apiClient.get("/plantas_baixas_busca_imagens", {
@@ -64,19 +69,18 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
 
       if (Object.keys(response.data).length === 1) {
         let planta_baixa = response.data["destino"] || response.data["origem"];
-        setImageUrl("http://localhost:3333/files/" + planta_baixa.imagem);
+        setImageUrl(endereco + planta_baixa.imagem);
         setMarkers(planta_baixa.marcacoes);
         setImageUrl2(null);
         setMarkers2([]);
       } else if (Object.keys(response.data).length === 2) {
-        setImageUrl("http://localhost:3333/files/" + response.data["origem"].imagem);
+        setImageUrl(endereco + response.data["origem"].imagem);
         setMarkers(response.data["origem"].marcacoes);
-        setImageUrl2("http://localhost:3333/files/" + response.data["destino"].imagem);
+        setImageUrl2(endereco + response.data["destino"].imagem);
         setMarkers2(response.data["destino"].marcacoes);
       }
     } catch (error) {
       toast.error("Erro ao buscar sala!");
-      console.log(error);
     }
   };
 
@@ -98,7 +102,12 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
           instanceId="localizacao-atual"
           options={options}
           defaultValue={currentLocation}
-          placeholder="Localização Atual"
+          placeholder={
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <FaMapPin style={{ color: 'blue', marginRight: '5px' }} />
+              <span>Localização Atual</span>
+            </div>
+          }
           onChange={(option) => {
             setLocalizacaoAtual(option.value);
           }}
@@ -106,7 +115,12 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
         <SelectFloatingLabel
           instanceId="destino-desejado"
           options={options}
-          placeholder="Destino Desejado"
+          placeholder={
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <FaMapMarkerAlt style={{ color: 'red', marginRight: '5px' }} />
+              <span>Destino Desejado</span>
+            </div>
+          }
           onChange={(option) => {
             setDestinoDesejado(option.value);
           }}
