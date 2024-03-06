@@ -55,6 +55,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     setLoading(true);
     if (!localizacaoAtual || !destinoDesejado) {
       toast.error("Selecione a localização atual e o destino desejado!");
+      setLoading(false);
       return;
     }
 
@@ -81,17 +82,18 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
         setImageUrl2(endereco + response.data["destino"].imagem);
         setMarkers2(response.data["destino"].marcacoes);
       }
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
       toast.error("Erro ao buscar sala!");
     }
+
+    setLoading(false);
   };
 
   return (
     <>
       <Head>
         <title>Busca Sala</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Head>
       <Box className={styles.containerImagem}>
         {imageUrl2 ? (
