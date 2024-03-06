@@ -49,8 +49,10 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
 
   const [imageUrl2, setImageUrl2] = useState(null);
   const [markers2, setMarkers2] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
+    setLoading(true);
     if (!localizacaoAtual || !destinoDesejado) {
       toast.error("Selecione a localização atual e o destino desejado!");
       return;
@@ -79,7 +81,9 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
         setImageUrl2(endereco + response.data["destino"].imagem);
         setMarkers2(response.data["destino"].marcacoes);
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error("Erro ao buscar sala!");
     }
   };
@@ -125,7 +129,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
             setDestinoDesejado(option.value);
           }}
         />
-        <Button type="submit" colorScheme="green" onClick={handleSubmit}>
+        <Button type="submit" colorScheme="green" onClick={handleSubmit} isLoading={loading} loadingText="Buscando...">
           Buscar
         </Button>
       </Box>

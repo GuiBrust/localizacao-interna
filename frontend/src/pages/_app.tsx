@@ -61,7 +61,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={themeMui}>
         <Component {...pageProps} />
         <ToastContainer limit={5} autoClose={3000} />
-        </ThemeProvider>;
+        </ThemeProvider>
       </ChakraProvider>
     </AuthProvider>
   );
