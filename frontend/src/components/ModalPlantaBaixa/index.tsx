@@ -203,7 +203,6 @@ export default function ModalPlantaBaixa({ isOpen, onClose, dataEdit, setData })
       await apagaSalas(parseInt(id));
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 5000));
     setIsLoaded(true);
   }
 
