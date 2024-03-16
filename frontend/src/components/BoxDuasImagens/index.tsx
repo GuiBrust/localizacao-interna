@@ -35,7 +35,6 @@ export default function BoxDuasImagens({ imageUrl, markers, imageUrl2, markers2 
     <>
       {imageUrl && (
         <Box className={styles.boxInterna}>
-          <span>Localização Atual</span>
           <TransformWrapper>
             <TransformComponent>{renderMarkers(imageUrl, markers, true)}</TransformComponent>
           </TransformWrapper>
@@ -44,7 +43,6 @@ export default function BoxDuasImagens({ imageUrl, markers, imageUrl2, markers2 
 
       {imageUrl2 && (
         <Box className={styles.boxInterna}>
-          <span>Destino Desejado</span>
           <TransformWrapper>
             <TransformComponent>{renderMarkers(imageUrl2, markers2, false)}</TransformComponent>
           </TransformWrapper>

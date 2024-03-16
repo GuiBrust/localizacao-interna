@@ -30,7 +30,7 @@ import styles from "./styles.module.scss";
 import { FcAddImage } from "react-icons/fc";
 import ImageMarker, { Marker } from "react-image-marker";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { ChangeEvent } from 'react';
+import { ChangeEvent } from "react";
 
 interface CustomMarker extends Marker {
   description?: string;
@@ -70,21 +70,15 @@ async function cadastraSalas(id_planta_baixa: number, markers: CustomMarker[]) {
   }
 }
 
-export default function ModalPlantaBaixa({
-  isOpen,
-  onClose,
-  dataEdit,
-  setData,
-}) {
+export default function ModalPlantaBaixa({ isOpen, onClose, dataEdit, setData }) {
   const [descricao, setDescricao] = useState(dataEdit.descricao || "");
   const [bloco_id, setBloco_id] = useState(dataEdit.andar?.bloco_id || "");
   const [andar_id, setAndar_id] = useState(dataEdit.andar?.id || "");
   const [opcoes_blocos, setOpcoesBlocos] = useState([]);
   const [opcoes_andares, setOpcoesAndares] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(true);
 
-  const link_imagem = dataEdit.imagem
-    ? process.env.NEXT_PUBLIC_API_URL + "files/" + dataEdit.imagem
-    : "";
+  const link_imagem = dataEdit.imagem ? process.env.NEXT_PUBLIC_API_URL + "files/" + dataEdit.imagem : "";
   const [imageUrl, setImageUrl] = useState(link_imagem);
   const [imageProd, setImage] = useState(null);
 
@@ -131,9 +125,7 @@ export default function ModalPlantaBaixa({
     async function fetchSalas() {
       try {
         const apiClient = setupAPIClient();
-        const response = await apiClient.get(
-          `/salas?planta_baixa_id=${dataEdit.id}`
-        );
+        const response = await apiClient.get(`/salas?planta_baixa_id=${dataEdit.id}`);
 
         setMarkers(
           response.data.map((sala) => ({
@@ -156,12 +148,7 @@ export default function ModalPlantaBaixa({
     }
   }, [bloco_id, isOpen, dataEdit.id]);
 
-  async function handlePostPlantaBaixa(
-    descricao: string,
-    andar_id: number,
-    file: File,
-    markers: CustomMarker[]
-  ) {
+  async function handlePostPlantaBaixa(descricao: string, andar_id: number, file: File, markers: CustomMarker[]) {
     let response;
     try {
       const apiClient = setupAPIClient();
@@ -189,13 +176,7 @@ export default function ModalPlantaBaixa({
     onClose();
   }
 
-  async function handlePutPlantaBaixa(
-    id: string,
-    descricao: string,
-    andar_id: number,
-    file: File,
-    markers: CustomMarker[]
-  ) {
+  async function handlePutPlantaBaixa(id: string, descricao: string, andar_id: number, file: File, markers: CustomMarker[]) {
     try {
       const apiClient = setupAPIClient();
       const formData = new FormData();
@@ -212,14 +193,18 @@ export default function ModalPlantaBaixa({
     } catch {
       toast.error("Erro ao atualizar Planta Baixa!");
       onClose();
+      setIsLoaded(true);
       return;
     }
 
     if (markers.length > 0) {
       cadastraSalas(parseInt(id), markers);
-    }else{
+    } else {
       await apagaSalas(parseInt(id));
     }
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    setIsLoaded(true);
   }
 
   const [markers, setMarkers] = useState<CustomMarker[]>([]);
@@ -238,21 +223,13 @@ export default function ModalPlantaBaixa({
             <Box flex={1} m={2}>
               <FormControl>
                 <FormLabel>Descrição</FormLabel>
-                <Input
-                  placeholder="Descrição"
-                  value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
-                />
+                <Input placeholder="Descrição" value={descricao} onChange={(e) => setDescricao(e.target.value)} />
               </FormControl>
             </Box>
             <Box flex={1} m={2}>
               <FormControl>
                 <FormLabel>Bloco</FormLabel>
-                <Select
-                  placeholder="Selecione um bloco"
-                  value={bloco_id}
-                  onChange={(e) => setBloco_id(e.target.value)}
-                >
+                <Select placeholder="Selecione um bloco" value={bloco_id} onChange={(e) => setBloco_id(e.target.value)}>
                   {opcoes_blocos.map((bloco) => (
                     <option key={bloco.id} value={bloco.id}>
                       {bloco.descricao}
@@ -264,11 +241,7 @@ export default function ModalPlantaBaixa({
             <Box flex={1} m={2}>
               <FormControl>
                 <FormLabel>Andar</FormLabel>
-                <Select
-                  placeholder="Selecione um andar"
-                  value={andar_id}
-                  onChange={(e) => setAndar_id(e.target.value)}
-                >
+                <Select placeholder="Selecione um andar" value={andar_id} onChange={(e) => setAndar_id(e.target.value)}>
                   {opcoes_andares.map((andar) => (
                     <option key={andar.id} value={andar.id}>
                       {andar.descricao}
@@ -279,16 +252,14 @@ export default function ModalPlantaBaixa({
             </Box>
           </Flex>
           <Flex mt={3} ml={2}>
-          <Box>
-            <label className={styles.label}>Imagem</label>
-          </Box>
-        </Flex>
+            <Box>
+              <label className={styles.label}>Imagem</label>
+            </Box>
+          </Flex>
           <Stack direction={{ base: "column", md: "row", lg: "row" }} spacing={4}>
             <Box className={styles.imageContainer} flex={2} m={2}>
               <label className={styles.labelImage}>
-                <span
-                  onClick={() => document.getElementById("fileInput").click()}
-                >
+                <span onClick={() => document.getElementById("fileInput").click()}>
                   <FcAddImage size={30} />
                 </span>
                 {imageUrl && (
@@ -301,13 +272,7 @@ export default function ModalPlantaBaixa({
                   />
                 )}
               </label>
-              <input
-                className={styles.inputImage}
-                type="file"
-                accept="image/png, image/jpeg"
-                id="fileInput"
-                onChange={handleFile}
-              />
+              <input className={styles.inputImage} type="file" accept="image/png, image/jpeg" id="fileInput" onChange={handleFile} />
             </Box>
             <Box className={styles.tableContainer} flex={1} m={2}>
               <TableContainer>
@@ -329,8 +294,7 @@ export default function ModalPlantaBaixa({
                             value={marker.description}
                             onChange={(e) => {
                               const updatedMarkers = [...markers];
-                              updatedMarkers[index].description =
-                                e.target.value;
+                              updatedMarkers[index].description = e.target.value;
                               setMarkers(updatedMarkers);
                             }}
                           />
@@ -341,9 +305,7 @@ export default function ModalPlantaBaixa({
                             fontSize={20}
                             cursor="pointer "
                             onClick={() => {
-                              setMarkers(
-                                markers.filter((_, indice) => indice !== index)
-                              );
+                              setMarkers(markers.filter((_, indice) => indice !== index));
                             }}
                           />
                         </Td>
@@ -358,17 +320,14 @@ export default function ModalPlantaBaixa({
 
         <ModalFooter>
           <Button
+            isLoading={!isLoaded}
+            loadingText="Salvando..."
             colorScheme="blue"
             mr={3}
             onClick={() => {
+              setIsLoaded(false);
               if (dataEdit.id) {
-                handlePutPlantaBaixa(
-                  dataEdit.id,
-                  descricao,
-                  andar_id,
-                  imageProd,
-                  markers
-                );
+                handlePutPlantaBaixa(dataEdit.id, descricao, andar_id, imageProd, markers);
               } else {
                 handlePostPlantaBaixa(descricao, andar_id, imageProd, markers);
               }
@@ -376,7 +335,7 @@ export default function ModalPlantaBaixa({
           >
             Salvar
           </Button>
-          <Button onClick={onClose}>Cancelar</Button>
+          <Button isLoading={!isLoaded} onClick={onClose}>Cancelar</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
