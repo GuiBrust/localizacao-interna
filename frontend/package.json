@@ -16,7 +16,7 @@
     "@material-ui/styles": "^4.11.5",
     "@mui/x-data-grid": "^4.0.0",
     "@types/pdfmake": "^0.2.9",
-    "axios": "^1.4.0",
+    "axios": "^1.7.4",
     "browserslist": "^4.21.0",
     "caniuse-lite": "^1.0.30001517",
     "date-fns": "^2.30.0",
