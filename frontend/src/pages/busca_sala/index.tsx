@@ -14,6 +14,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     planta_baixa.salas.map((sala) => ({
       value: `${sala.id}_salas`,
       label: `${planta_baixa.andar.bloco.descricao} - ${sala.descricao}`,
+      type: "Salas",
     }))
   );
 
@@ -24,6 +25,7 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     blocoOptions = JSON.parse(blocos.marcacoesBloco).map((bloco) => ({
       value: `${bloco.bloco_id}_bloco`,
       label: bloco.descricao_bloco,
+      type: "Ambientes Externos",
     }));
   }
 
@@ -40,9 +42,12 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     },
   ];
 
-  const currentLocation = options.flatMap((group) => group.options).find((option) => option.value == `${id_tipo}_${tipo}`) || null;
+  const currentLocation =
+    options
+      .flatMap((group) => group.options)
+      .find((option) => option.value === `${id_tipo}_${tipo}`) || null;
 
-  const [localizacaoAtual, setLocalizacaoAtual] = useState(currentLocation?.value || null);
+  const [localizacaoAtual, setLocalizacaoAtual] = useState(currentLocation || null);
   const [destinoDesejado, setDestinoDesejado] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [markers, setMarkers] = useState([]);
@@ -50,6 +55,21 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
   const [imageUrl2, setImageUrl2] = useState(null);
   const [markers2, setMarkers2] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const getOptionsForLocalizacaoAtual = () => options;
+
+  const getOptionsForDestinoDesejado = () => {
+    if (localizacaoAtual && localizacaoAtual.type) {
+      return options.map((group) => ({
+        ...group,
+        options: group.options.map((option) => ({
+          ...option,
+          isDisabled: option.type !== localizacaoAtual.type,
+        })),
+      }));
+    }
+    return options;
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -65,8 +85,8 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     try {
       const response = await apiClient.get("/plantas_baixas_busca_imagens", {
         params: {
-          localizacaoAtual,
-          destinoDesejado,
+          localizacaoAtual: localizacaoAtual.value,
+          destinoDesejado: destinoDesejado.value,
         },
       });
 
@@ -93,11 +113,19 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
     <>
       <Head>
         <title>Busca Sala</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
       </Head>
       <Box className={styles.containerImagem}>
         {imageUrl2 ? (
-          <BoxDuasImagens imageUrl={imageUrl} markers={markers} imageUrl2={imageUrl2} markers2={markers2} />
+          <BoxDuasImagens
+            imageUrl={imageUrl}
+            markers={markers}
+            imageUrl2={imageUrl2}
+            markers2={markers2}
+          />
         ) : (
           <BoxImagem imageUrl={imageUrl} markers={markers} />
         )}
@@ -106,32 +134,40 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
       <Box className={styles.containerFiltros}>
         <SelectFloatingLabel
           instanceId="localizacao-atual"
-          options={options}
-          defaultValue={currentLocation}
+          options={getOptionsForLocalizacaoAtual()}
+          value={localizacaoAtual}
           placeholder={
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <FaMapPin style={{ color: 'blue', marginRight: '5px' }} />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <FaMapPin style={{ color: "blue", marginRight: "5px" }} />
               <span>Localização Atual</span>
             </div>
           }
           onChange={(option) => {
-            setLocalizacaoAtual(option.value);
+            setLocalizacaoAtual(option);
+            setDestinoDesejado(null);
           }}
         />
         <SelectFloatingLabel
           instanceId="destino-desejado"
-          options={options}
+          options={getOptionsForDestinoDesejado()}
+          value={destinoDesejado}
           placeholder={
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <FaMapMarkerAlt style={{ color: 'red', marginRight: '5px' }} />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <FaMapMarkerAlt style={{ color: "red", marginRight: "5px" }} />
               <span>Destino Desejado</span>
             </div>
           }
           onChange={(option) => {
-            setDestinoDesejado(option.value);
+            setDestinoDesejado(option);
           }}
         />
-        <Button type="submit" colorScheme="green" onClick={handleSubmit} isLoading={loading} loadingText="Buscando...">
+        <Button
+          type="submit"
+          colorScheme="green"
+          onClick={handleSubmit}
+          isLoading={loading}
+          loadingText="Buscando..."
+        >
           Buscar
         </Button>
       </Box>

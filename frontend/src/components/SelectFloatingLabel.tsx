@@ -4,7 +4,6 @@ import Select, { components } from 'react-select';
 const { ValueContainer, Placeholder } = components;
 
 const CustomValueContainer = (props) => {
-  // Destructure props to extract what's needed for the Placeholder
   const { children, isFocused, selectProps } = props;
   const { placeholder } = selectProps;
 
