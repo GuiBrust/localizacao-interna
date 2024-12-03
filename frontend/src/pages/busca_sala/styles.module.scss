@@ -27,3 +27,37 @@
     width: 100%;
   }
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 400px; /* Para telas maiores, limite o tamanho */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.centralizado {
+  width: 100%; /* Responsividade para ocupar todo o espaço em telas pequenas */
+}
+
+.containerImagem {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.containerFiltros {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Estilos para telas maiores */
+@media (min-width: 768px) {
+  .container {
+    max-width: 500px;
+  }
+}

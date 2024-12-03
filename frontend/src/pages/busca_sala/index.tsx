@@ -118,58 +118,59 @@ export default function BuscaSala({ plantas_baixas, blocos, tipo, id_tipo }) {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </Head>
-      <Box className={styles.containerImagem}>
-        {imageUrl2 ? (
-          <BoxDuasImagens
-            imageUrl={imageUrl}
-            markers={markers}
-            imageUrl2={imageUrl2}
-            markers2={markers2}
+      <Box className={`${styles.container} ${styles.centralizado}`}>
+        <Box className={styles.containerImagem}>
+          {imageUrl2 ? (
+            <BoxDuasImagens
+              imageUrl={imageUrl}
+              markers={markers}
+              imageUrl2={imageUrl2}
+              markers2={markers2}
+            />
+          ) : (
+            <BoxImagem imageUrl={imageUrl} markers={markers} />
+          )}
+        </Box>  
+        <Box className={styles.containerFiltros}>
+          <SelectFloatingLabel
+            instanceId="localizacao-atual"
+            options={getOptionsForLocalizacaoAtual()}
+            value={localizacaoAtual}
+            placeholder={
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <FaMapPin style={{ color: "blue", marginRight: "5px" }} />
+                <span>Localização Atual</span>
+              </div>
+            }
+            onChange={(option) => {
+              setLocalizacaoAtual(option);
+              setDestinoDesejado(null);
+            }}
           />
-        ) : (
-          <BoxImagem imageUrl={imageUrl} markers={markers} />
-        )}
-      </Box>
-
-      <Box className={styles.containerFiltros}>
-        <SelectFloatingLabel
-          instanceId="localizacao-atual"
-          options={getOptionsForLocalizacaoAtual()}
-          value={localizacaoAtual}
-          placeholder={
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <FaMapPin style={{ color: "blue", marginRight: "5px" }} />
-              <span>Localização Atual</span>
-            </div>
-          }
-          onChange={(option) => {
-            setLocalizacaoAtual(option);
-            setDestinoDesejado(null);
-          }}
-        />
-        <SelectFloatingLabel
-          instanceId="destino-desejado"
-          options={getOptionsForDestinoDesejado()}
-          value={destinoDesejado}
-          placeholder={
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <FaMapMarkerAlt style={{ color: "red", marginRight: "5px" }} />
-              <span>Destino Desejado</span>
-            </div>
-          }
-          onChange={(option) => {
-            setDestinoDesejado(option);
-          }}
-        />
-        <Button
-          type="submit"
-          colorScheme="green"
-          onClick={handleSubmit}
-          isLoading={loading}
-          loadingText="Buscando..."
-        >
-          Buscar
-        </Button>
+          <SelectFloatingLabel
+            instanceId="destino-desejado"
+            options={getOptionsForDestinoDesejado()}
+            value={destinoDesejado}
+            placeholder={
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <FaMapMarkerAlt style={{ color: "red", marginRight: "5px" }} />
+                <span>Destino Desejado</span>
+              </div>
+            }
+            onChange={(option) => {
+              setDestinoDesejado(option);
+            }}
+          />
+          <Button
+            type="submit"
+            colorScheme="green"
+            onClick={handleSubmit}
+            isLoading={loading}
+            loadingText="Buscando..."
+          >
+            Buscar
+          </Button>
+        </Box>
       </Box>
     </>
   );
