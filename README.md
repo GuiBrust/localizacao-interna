@@ -2,6 +2,18 @@
 
 CampusFind é um sistema para localização de ambientes no campus da UNOESC em Chapecó.
 
+## 🖼️ Visão Geral
+
+### 🔍 Busca de Salas
+![Busca de Salas](docs/busca_salas.png)
+
+### ⚙️ Tela de Administração de Blocos
+![CRUD de Salas](docs/crud_salas.png)
+
+## 📘 Documentação
+
+- 📄 [Guia de Utilização da Aplicação (PDF)](docs/how-to.pdf)
+
 ## Pré-requisitos
 
 - Docker instalado
