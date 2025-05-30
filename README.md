@@ -14,11 +14,11 @@ CampusFind é um sistema para localização de ambientes no campus da UNOESC em 
 
 - 📄 [Guia de Utilização da Aplicação (PDF)](docs/how-to.pdf)
 
-## Pré-requisitos
+## ✅ Pré-requisitos
 
 - Docker instalado
 
-## Instruções para iniciar a aplicação
+## 🚀 Instruções para iniciar a aplicação
 
 1. Clone o repositório e acesse o diretório do projeto.
 
